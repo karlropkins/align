@@ -1,0 +1,19 @@
+citHeader("To cite 'align' package in publications use:")
+
+citEntry(entry="Manual",
+         title = "align: Data Alignment Tools",
+         author = personList(as.person("Daniel Quiroz Moreno"),
+                             as.person("Karl Ropkins")),
+         year = "2019",
+         note = paste("R package version ",
+                    packageDescription("align",
+                                 fields = c("Version"))[1], sep=""),
+         textVersion = paste("Daniel Quiroz Moreno and Karl Ropkins (2019) ",
+                    "align: Data Alignment Tools, ",
+                    "R package version ",
+                    packageDescription("align",
+                         fields = c("Version"))[1],".", sep=""))
+
+citFooter("Please cite both 'align' and R ",
+          "when using 'align'.",
+          "For R citation, see ", sQuote("citation()"))

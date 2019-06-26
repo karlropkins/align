@@ -1,0 +1,22 @@
+Package: align
+Title: Data Alignment Tools
+Version: 0.0.0.9000
+Date: 2019-06-07
+Authors@R: c(
+    person(c("Daniel", "Quiroz"), "Moreno", 
+            email="cristianquirozd1997@gmail.com", role= c("aut", "cre")),
+    person("Karl", "Ropkins", email="karl.ropkins@gmail.com", 
+            role= c("aut"))
+    )
+Description: Methods for the alignment and merging of partially or inexactly 
+    aligned data.
+License: GLP-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp,
+    dplyr,
+    RcppDE
