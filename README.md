@@ -4,7 +4,7 @@ Methods for the alignment and merging of partially or inexactly
 aligned data.
 
 ## Installation
-**align**:
+**align** from GitHub:
 
 ```{r, eval=FALSE}
 install.packages("devtools") #if you don't already have it
