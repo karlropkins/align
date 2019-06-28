@@ -9,8 +9,9 @@
 #'
 #' Package functions:
 #'
-#' Two object (x, y) alignment: nAlign, cAlign, cowAlign.
-#' One object (x) modification: regularize, warp.
+#' Two object (x, y, ...) alignment: n_align, cor_align, cow_align.
+#'
+#' One object (x, ...) modification: regularize, warp.
 #'
 #' @docType package
 #' @name align
