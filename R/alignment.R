@@ -25,7 +25,7 @@
 #could put all the alignment object handling on one page
 #    or on same page as parent ..._align() is we use dedicated
 #    alignment objects, so nAlignment, cAlignment, etc?
-#could convert from if to switch or case structure and error out
+#could convert from if to switch structure and error out
 #    if not known method..?
 
 #splatted function
