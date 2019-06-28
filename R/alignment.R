@@ -80,6 +80,7 @@ summary.alignment <-
     #summary method for alignment object
     if(object$method == "cor_align"){
       #quick for now
+      #think about this
       cat("alignment: cor_align\n",
           "\tx (", nrow(object$sources$x0), "x",
           ncol(object$sources$x0), ");\n",
