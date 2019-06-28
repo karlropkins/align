@@ -7,7 +7,8 @@ aligned data.
 **align**:
 
 ```{r, eval=FALSE}
-#[installation code]
+install.packages("devtools") #if you don't already have it
+devtools::install_github("KarlRopkins/align")
 ```
 
 ## Background
