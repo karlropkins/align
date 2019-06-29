@@ -24,9 +24,12 @@
 #work up for other ..._align functions (currently just cAlign)
 #could put all the alignment object handling on one page
 #    or on same page as parent ..._align() is we use dedicated
-#    alignment objects, so nAlignment, cAlignment, etc?
-#could convert from if to switch structure and error out
-#    if not known method..?
+#    alignment objects, so n_alignment, cor_alignment, etc?
+#could convert from if to switch structure
+#    might be easier to follow that 'nested if'?
+#    should be quicker?
+#    easier unknown handling
+#    testing on print.alignment
 
 #splatted function
 #' @rdname alignment
@@ -61,12 +64,14 @@ function(x, ...){
 #minimal for cor_alignment only
 print.alignment <-
   function(x, ...){
-    #summary method for alignment object
-    if(x$method == "cor_align"){
-      #quick for now
-      cat("alignment: xy cor_alignment row offset: ", x$offset, "\n")
-      invisible(x)
-    }
+    #using switch statement, one per ..._align method
+    ans <- switch(x$method,
+        cor_align = paste("alignment: xy cor_alignment row offset: ",
+                    x$offset, sep=""),
+        "[corrupted alignment object?]"
+    )
+    cat(ans, "\n")
+    invisible(x)
   }
 
 

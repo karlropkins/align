@@ -163,7 +163,7 @@ function(x, y = NULL, by = NULL, ...){
     #######################################################
 
     #use nAlign to merge full datasets
-    ans <- nAlign(d$x0, d$y0, n = bst.lag, output = "ans")
+    ans <- n_align(d$x0, d$y0, n = bst.lag, output = "ans")
 
     #make alignment object
     #    align_buildAlignment in unexported code
