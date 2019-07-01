@@ -294,7 +294,7 @@ align_output <- function(alignment, output){
         if(output[i] == "alignment") return(alignment)
         if(output[i] %in% names(alignment)) return(alignment[[output[i]]])
       } else {
-        if(output[i] == "plot") plot(alignment)
+        if(output[i] == "plot") print(plot(alignment))
         if(output[i] == "summary") summary(alignment)
         if(output[i] == "print") print(alignment)
         if(output[i] == "alignment") alignment
@@ -303,3 +303,34 @@ align_output <- function(alignment, output){
     }
   }
 }
+
+
+
+##################################
+#alignment_corAlignPlot
+##################################
+
+#kr v.0.0.2
+#update of previous
+#using lattice::xyplot rather than plot
+#  not sure I need the importfrom if I am using lattice::fun()
+#  might change this to ggplot but dependents and installation
+#      time will increase significantly
+#' @importFrom lattice xyplot
+alignment_corrAlignmentPlot <-
+  function(x, ...){
+  lattice::xyplot(x$reports$scores~x$reports$index,
+      type="h", xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]",
+      panel = function(...){
+          lattice::panel.grid(-1, -1)
+          lattice::panel.xyplot(...)
+          lattice::panel.abline(v = 0, col.line = "red", lty = 3)
+          lattice::panel.abline(v = x$report$offset, col = "red",
+                lty = 3)
+          if(x$report$offset!=0)
+              lattice::panel.arrows(0, max(x$reports$scores, na.rm = TRUE),
+                x$reports$offset,
+                max(x$reports$scores, na.rm = TRUE),
+                col = "red", 0.1)
+      })
+  }

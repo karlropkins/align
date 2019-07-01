@@ -40,20 +40,25 @@
 plot.alignment <-
 function(x, ...){
   #plot method for alignment object
-  if(x$method == "cor_align"){
+  switch(x$method,
+         cor_align = alignment_corrAlignmentPlot(x, ...),
+         {cat("[corrupted alignment object?]\n");
+           invisible(x)}
+  )
+#  if(x$method == "cor_align"){
     ##################################################
     #replace this with lattice plot or ggplot
     #so ouput is actual plot rather an invisible(x)...
     ##################################################
-    plot(x$reports$index, x$reports$scores, type="h",
-         xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]")
-    abline(v=0, col="pink", lty=3)
-    abline(v=x$report$offset, col="red", lty=3)
-    if(x$report$offset!=0)
-      arrows(0, max(x$reports$scores, na.rm=T), x$reports$offset ,
-             max(x$reports$scores, na.rm=T), col="red", 0.1)
-    invisible(x)
-  }
+#    plot(x$reports$index, x$reports$scores, type="h",
+#         xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]")
+#    abline(v=0, col="pink", lty=3)
+#    abline(v=x$report$offset, col="red", lty=3)
+#    if(x$report$offset!=0)
+#      arrows(0, max(x$reports$scores, na.rm=T), x$reports$offset ,
+#             max(x$reports$scores, na.rm=T), col="red", 0.1)
+#    invisible(x)
+#  }
 }
 
 
