@@ -9,7 +9,10 @@
 #' and merged with.
 #' @param y Second \code{vector} or \code{data.frame} to align and
 #' merge with \code{x}.
-#' @param n \code{y} offset when binding \code{y} to \code{x},  default 0.
+#' @param n \code{y} offset when binding \code{y} to \code{x},
+#' default 0.
+#' @param by If \code{x} or \code{y} are \code{data.frame}s, the names
+#' of the columns that \code{n_align} should align.
 #' @param ... Other arguments, currently ignored.
 #' @author Karl Ropkins
 #' @return \code{data.frame} of \code{x} and \code{y}, with \code{y}
@@ -21,28 +24,69 @@
 #    and this is not main function...
 
 ############################
-#to do
+#testing
 ############################
-#non-unique name handling
-#no name handling (?)
-#safer alternative to $..ref
-#look at unexported code
-#examples
-#think about common handling
-#   (1) by would be meaningless
-#   except maybe n_align(x, by="column.in.x", n=2)
-#   (2) an alignment output from nAlign
-#   would be of very limited value...
-#
+#made n_align a method
+#incorporated align output handling
+#made alignment output
+#    alignment methods: currently print only...
+#added by
+#    (all currently messy)
 
-#' @importFrom dplyr full_join
+
+#' @rdname n_align
 #' @export
 n_align <-
-  function(x, y, n = 0, ...){
+  function(x, y = NULL, n = 0, by = NULL, ...) {
+    UseMethod("n_align")
+  }
+
+
+#' @export
+#' @method n_align default
+n_align.default <-
+n_align <-
+  function(x, y = NULL, n = 0, by = NULL, ...){
     #same as previously align
-    #    but without pems class handling
-    x <- as.data.frame(x)
-    y <- as.data.frame(y)
+    #    without pems class handling and INSTEAD
+    #    including align package structure
+
+    #####################################
+    #unexported align_extraArgsHandler
+    #####################################
+    #options
+    #Done:
+    #To consider doing: "ans","plot", "offset", "summary", "alignment"
+    x.args <- align_extraArgsHandler(...,
+                default.output = c("ans"),
+                ref.args = c("ans", "alignment"))
+
+    ####################################
+    #unexported align_XYByArgsHandler
+    ####################################
+    ## can't do this yet
+    #d <- align_XYByArgsHandler(x=x, y=y, by=by)
+
+    x <- as.data.frame(x, stringsAsFactors = FALSE)
+    if(!is.null(y)) {
+      y <- as.data.frame(y, stringsAsFactors = FALSE)
+    } else {
+      if(!is.null(by)){
+        by <- c(names(by), by)
+        if(by[1] %in% names(x)){
+          y <- as.data.frame(x[by[1]], stringsAsFactors = FALSE)
+          x <- as.data.frame(x[names(x) != by[1]],
+                             stringsAsFactors = FALSE)
+        } else {
+          stop("..._align(x, by, ...) missing 'y' or 'by' element",
+               call. = FALSE)
+        }
+      } else {
+        stop("..._align(x, by, ...) missing 'x' or 'by' element",
+             call. = FALSE)
+      }
+    }
+
     #could change non-unique name handling?
     #######################################
     ##temp <- make.names(c(names(x), names(y)), unique = TRUE)
@@ -70,5 +114,17 @@ n_align <-
     ##################
     ans <- ans[order(ans$..ref),]
     rownames(ans) <- 1:nrow(ans)
-    ans[names(ans)!="..ref"]
+    ans <- ans[names(ans)!="..ref"]
+
+    #make alignment object
+    #    align_buildAlignment in unexported code
+    #    (if objects do not get anymore complicated
+    #        should probably drop function and do directly)
+    alignment <- align_buildAlignment(method = "n_align",
+                                      ans = ans,
+                                      sources = list(x = x, y = y),
+                                      offset = n)
+
+    #output
+    align_output(alignment, x.args$output)
   }

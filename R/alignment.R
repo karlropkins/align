@@ -73,6 +73,8 @@ print.alignment <-
     ans <- switch(x$method,
         cor_align = paste("alignment: xy cor_alignment row offset: ",
                     x$offset, sep=""),
+        n_align = paste("alignment: xy n_alignment row offset: ",
+                        x$offset, sep=""),
         "[corrupted alignment object?]"
     )
     cat(ans, "\n")

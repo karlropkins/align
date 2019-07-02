@@ -316,10 +316,16 @@ align_output <- function(alignment, output){
 #  not sure I need the importfrom if I am using lattice::fun()
 #  might change this to ggplot but dependents and installation
 #      time will increase significantly
+############################
+#to do
+############################
+#code needs tidying to allow user modification
+#
+
 #' @importFrom lattice xyplot
 alignment_corrAlignmentPlot <-
   function(x, ...){
-  lattice::xyplot(x$reports$scores~x$reports$index,
+    lattice::xyplot(x$reports$scores~x$reports$index,
       type="h", xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]",
       panel = function(...){
           lattice::panel.grid(-1, -1)
@@ -328,7 +334,8 @@ alignment_corrAlignmentPlot <-
           lattice::panel.abline(v = x$report$offset, col = "red",
                 lty = 3)
           if(x$report$offset!=0)
-              lattice::panel.arrows(0, max(x$reports$scores, na.rm = TRUE),
+              lattice::panel.arrows(0, max(x$reports$scores,
+                                           na.rm = TRUE),
                 x$reports$offset,
                 max(x$reports$scores, na.rm = TRUE),
                 col = "red", 0.1)

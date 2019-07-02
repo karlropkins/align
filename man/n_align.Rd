@@ -4,7 +4,7 @@
 \alias{n_align}
 \title{n_align}
 \usage{
-n_align(x, y, n = 0, ...)
+n_align(x, y = NULL, n = 0, by = NULL, ...)
 }
 \arguments{
 \item{x}{First \code{vector} or \code{data.frame}, to be aligned
@@ -13,7 +13,11 @@ and merged with.}
 \item{y}{Second \code{vector} or \code{data.frame} to align and
 merge with \code{x}.}
 
-\item{n}{\code{y} offset when binding \code{y} to \code{x},  default 0.}
+\item{n}{\code{y} offset when binding \code{y} to \code{x},
+default 0.}
+
+\item{by}{If \code{x} or \code{y} are \code{data.frame}s, the names
+of the columns that \code{n_align} should align.}
 
 \item{...}{Other arguments, currently ignored.}
 }
