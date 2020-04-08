@@ -58,6 +58,7 @@ n_align <-
     #Done:
     #To consider doing: "ans","plot", "offset", "summary", "alignment"
     x.args <- align_extraArgsHandler(...,
+                default.method = "n_align",
                 default.output = c("ans"),
                 ref.args = c("ans", "alignment"))
 
@@ -65,27 +66,29 @@ n_align <-
     #unexported align_XYByArgsHandler
     ####################################
     ## can't do this yet
-    #d <- align_XYByArgsHandler(x=x, y=y, by=by)
-
-    x <- as.data.frame(x, stringsAsFactors = FALSE)
-    if(!is.null(y)) {
-      y <- as.data.frame(y, stringsAsFactors = FALSE)
-    } else {
-      if(!is.null(by)){
-        by <- c(names(by), by)
-        if(by[1] %in% names(x)){
-          y <- as.data.frame(x[by[1]], stringsAsFactors = FALSE)
-          x <- as.data.frame(x[names(x) != by[1]],
-                             stringsAsFactors = FALSE)
-        } else {
-          stop("..._align(x, by, ...) missing 'y' or 'by' element",
-               call. = FALSE)
-        }
-      } else {
-        stop("..._align(x, by, ...) missing 'x' or 'by' element",
-             call. = FALSE)
-      }
-    }
+    d <- align_XYByArgsHandler(x=x, y=y, by=by,
+                               method = x.args$method)
+    x <- d$x
+    y <- d$y
+    #x <- as.data.frame(x, stringsAsFactors = FALSE)
+    #if(!is.null(y)) {
+    #  y <- as.data.frame(y, stringsAsFactors = FALSE)
+    #} else {
+    #  if(!is.null(by)){
+    #    by <- c(names(by), by)
+    #    if(by[1] %in% names(x)){
+    #      y <- as.data.frame(x[by[1]], stringsAsFactors = FALSE)
+    #      x <- as.data.frame(x[names(x) != by[1]],
+    #                         stringsAsFactors = FALSE)
+    #    } else {
+    #      stop("..._align(x, by, ...) missing 'y' or 'by' element",
+    #           call. = FALSE)
+    #    }
+    #  } else {
+    #    stop("..._align(x, by, ...) missing 'x' or 'by' element",
+    #         call. = FALSE)
+    #  }
+    #}
 
     #could change non-unique name handling?
     #######################################
@@ -102,7 +105,8 @@ n_align <-
     #pad ref if needed
     #(pems did this for you)
     ####################
-    temp <- min(ans$..ref, na.rm = TRUE): max(ans$..ref, na.rm = TRUE)
+    temp <- min(ans$..ref, na.rm = TRUE): max(ans$..ref,
+                                              na.rm = TRUE)
     temp <- temp[!temp %in% ans$..ref]
     if(length(temp)>0){
       ref <- (nrow(ans)+1):(nrow(ans)+length(temp))
@@ -122,7 +126,8 @@ n_align <-
     #        should probably drop function and do directly)
     alignment <- align_buildAlignment(method = "n_align",
                                       ans = ans,
-                                      sources = list(x = x, y = y),
+                                      sources = list(x = x,
+                                                     y = y),
                                       offset = n)
 
     #output

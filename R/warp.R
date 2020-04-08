@@ -58,3 +58,60 @@ function (x, trans = 1, ...)
 }
 
 
+
+#unexported code
+
+####################################
+#warp_frame
+####################################
+
+#kr v 0.0.1 (2019/06/05)
+
+###############################
+#to do
+###############################
+#
+
+#the warp_engine joke got very old, very quick...
+#based on common code for regularize and
+#nAlign in pems.utils and warp
+
+warp_frame <-
+  function(x, old.x, new.x)
+  {
+    ###########################
+    #this is a little messy
+    #check final version in
+    #sleeper.service was not better...
+    ###########################
+    new.df <- if(length(new.x) < length(old.x)){
+      as.data.frame(x[1:length(new.x),])
+    } else {
+      temp <- as.data.frame(x)
+      temp[length(new.x), 1] <- NA
+      as.data.frame(temp)
+    }
+    names(new.df)[1] <- names(x)[1]
+    #populate new.df
+    for (i in names(x)) {
+      ################################
+      #need to think about not handled
+      #object classes
+      ################################
+      if (is.numeric(x[, i]))
+        new.df[, i] <- approx(old.x, x[, i], new.x, rule = 2)$y
+      if (is.factor(x[, i]) || is.character(x[, i])) {
+        #############################
+        #factor correction needs
+        #thinking about
+        #############################
+        new.df[, i][which(new.x %in% old.x)] <- x[, i][which(new.x %in% old.x)]
+        for (j in 2:length(new.df[, i]))
+        if(is.na(new.df[j, i])) new.df[j, i] <- new.df[j - 1, i]
+      }
+      if (any(c("POSIXct", "POSIXt") %in% class(x[, i]))) {
+        new.df[, i] <- x[1, i] + new.x
+      }
+    }
+    new.df
+  }

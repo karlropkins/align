@@ -41,7 +41,9 @@ plot.alignment <-
 function(x, ...){
   #plot method for alignment object
   switch(x$method,
+#cor plot function name needs fixing
          cor_align = alignment_corrAlignmentPlot(x, ...),
+         cow_align = alignment_cowAlignmentPlot(x, ...),
          {cat("[corrupted alignment object?]\n");
            invisible(x)}
   )
@@ -73,6 +75,9 @@ print.alignment <-
     ans <- switch(x$method,
         cor_align = paste("alignment: xy cor_alignment row offset: ",
                     x$offset, sep=""),
+#cow needs doing
+        cow_align = paste("alignment: xy cow_alignment row offset: ",
+                          x$offset, sep=""),
         n_align = paste("alignment: xy n_alignment row offset: ",
                         x$offset, sep=""),
         "[corrupted alignment object?]"
@@ -94,6 +99,17 @@ summary.alignment <-
       #quick for now
       #think about this
       cat("alignment: cor_align\n",
+          "\tx (", nrow(object$sources$x0), "x",
+          ncol(object$sources$x0), ");\n",
+          "\ty (", nrow(object$sources$y0), "x",
+          ncol(object$sources$y0), ");\n",
+          "\ty row offset: ", object$offset, "\n")
+      invisible(object)
+    }
+    if(object$method == "cow_align"){
+      #quick for now
+#cow needs doing...
+      cat("alignment: cow_align\n",
           "\tx (", nrow(object$sources$x0), "x",
           ncol(object$sources$x0), ");\n",
           "\ty (", nrow(object$sources$y0), "x",

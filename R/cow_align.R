@@ -6,17 +6,17 @@
 #' @description Non-linear alignment using Correlation Optimized
 #' warping (COW). This is \code{cow} but with argument structure like
 #' other ..._align functions.
-#' @param x First \code{vector}, to be COW aligned with when merged
-#' data.
-#' @param y Second \code{vector} to COW warp align with \code{x}.
+#' @param x First \code{vector} or a \code{data.frame} containing
+#' \code{vector} to use as reference when COW aligning \code{y} data.
+#' @param y Second \code{vector} or \code{data.frame} containing
+#' \code{vector} to COW warp align with \code{x}.
+#' @param by If \code{x} or \code{y} are \code{data.frames}, the
+#' names of data columns to aligned.
 #' @param seg Segment size for warping.
 #' @param slack Segment size expansion/compression range.
 #' @param print.report (logical) print segment report.
 #' @param r.power (logical or numeric) correlation power
 #' (1-4).
-#' @param equal.segments (logical) force equal segment lengths in
-#' \code{xt} and \code{xP} instead of filling up \code{xt} with N
-#' boundary-points.
 #' @param ... Other arguments, currently ignored.
 #' @note This function is based on previous matlab (see Source),
 #' but some formal arguments and parameters have been changed to
@@ -27,7 +27,7 @@
 #' preprocessing method for chromatographic Data:
 #'
 #' Niels-Peter Vest Nielsen, Jens Micheal Carstensen
-#' and Jørn Smedegaard,  1998, Aligning of singel and multiple wavelength
+#' and Jorn Smedegaard,  1998, Aligning of singel and multiple wavelength
 #' chromatographic profiles for chemometric data analysis using
 #' correlation optimised warping. J. Chrom. A 805(1998), 17-35
 #'
@@ -44,7 +44,7 @@
 ###############################
 #code as provided by Daniel
 #BUT modified to make it more like
-#other ...Align functions
+#other ...align functions
 ###############################
 
 ###############################
@@ -55,6 +55,11 @@
 #   handling like cAlign
 #think about alignment output, plot,
 #   summary outputs
+
+###################################
+#to look at
+###################################
+#equal.segments kills it...
 
 ###############################
 #from previous help
@@ -104,21 +109,192 @@
 #Slack to slack
 #replaced option[1] with print.report
 #replaced option[2] with r.power, can be 1-4
-#replaced option[3] with equal.segments
-#option 4 not done...
+#replaced option[3] removed, see below
+#option 4 not coded previously...
 #does not seem to be an option 5...
 
 ###############################
 #note:
-# this errors out if option3/equal.segments set...
+# previous code errored out if option3 set...
+# have prelim automatic work around...
+#job:
+# once sorted, remove equal.segment related code...
 ###############################
 
+#' @rdname cow_align
 #' @export
-cow_align <- function(x, y, seg, slack, print.report = FALSE,
-                    r.power = FALSE, equal.segments = FALSE,
-                     ...) {
+cow_align <-
+  function(x, y = NULL, by = NULL, ...) {
+    UseMethod("cow_align")
+  }
 
-  #my changes to code need checking and tidying
+
+#' @export
+#' @method cow_align default
+cow_align.default <-
+  function(x, y=NULL, by=NULL,
+           seg, slack,
+           print.report = FALSE, r.power = FALSE,
+           ...)
+  {
+
+  #tidy default settings
+  x.args <- align_extraArgsHandler(...,
+                  default.method = "cow_align",
+                  default.output = c("summary", "plot", "ans"),
+                  ref.args = c("ans","plot", "offset",
+                  "summary", "alignment"))
+
+  #handle x, y, by...
+  d <- align_XYByArgsHandler(x=x, y=y, by=by,
+                             method = x.args$method)
+
+  ##################################
+  #could add seg and slack defaults
+  #maybe with warning that they have
+  #been applied?
+  ##################################
+
+  #fit warp path
+  warp.path <- align_fitXYCOWWarpPath(x=d$x, y=d$y, seg=seg,
+                                      slack=slack,
+                                      print.report=print.report,
+                                      r.power=r.power)
+
+  #replaced option[1] with print.report
+  #replaced option[2] with r.power, can be 1-4
+
+#  warp.path <- cow(d$x, d$y, Seg=seg,
+#                   Slack=slack, Option=c(
+#                  print.report, r.power, equal.segments,
+#                  FALSE, FALSE
+#                   ))
+
+  #apply warp path
+#  ywarped <- align_applyXYCOWWarpPath(y=d$y0, warp.path)
+  ywarped <- align_applyXYCOWWarpPath(y=d$y0, warp.path)
+
+  #use n_align to merge full x0 and warped y0
+  ans <- n_align(d$x0, ywarped, n=warp.path$offset,
+                 output = "ans")
+
+  #make alignment object
+  #    align_buildAlignment in unexported code
+  #    (if objects do not get anymore complicated
+  #        should probably drop function and do directly)
+  alignment <- align_buildAlignment(method = "cow_align",
+                                    ans = ans, sources = d,
+                                    reports = warp.path,
+                                    offset = warp.path$offset)
+
+  #output
+  #align_output in unexported code
+  #this plus align_extraArgsHandler and align_XYByArgsHandler
+  #handle common elements of the ..._align functions
+  #     outputs = ans, plot, summary alignment object, etc.
+  align_output(alignment, x.args$output)
+}
+
+
+#non-exported functions
+
+#    histc
+#    InterpCoeff
+#    align_FitXYCOWWarpPath
+#    align_applyXYCOWWarpPath
+#    align_applyXYCOWWarpPath.old
+
+histc <-
+  function(values, edges) {
+    ledges <- length(edges)
+    nlow <-  length(values[values < edges[1]])
+    nhigh <- length(values[values > edges[ledges]])
+    bin <- NULL
+    for (i in seq_along(edges)[-ledges] ) {
+      binValues <- values[values >= edges[i] & values < edges[i+1]]
+      position <- match(binValues, values)
+      bin[position] <- i
+    }
+    bin <- bin[!is.na(bin)]
+    upper <- match(edges[ledges], values)
+    if(!is.na(upper)){
+      bin[length(bin) +1 ] = i+1
+    }
+    if( nlow > 0 ){
+      bin <- c(rep(0, nlow), bin)
+    }
+    if( nhigh > 0 ){
+      bin <- c(bin, rep(0, nlow))
+    }
+    return(bin)
+  }
+
+InterpCoeff <-
+  function(n, nprime, offs, rtn) {
+    p <- length(nprime)
+    q <- n - 1
+    coeff <- matrix(nrow = p, ncol =  n)
+    index <- matrix(nrow = p, ncol =  n)
+    for (i in seq(1, p)) {
+      pp <- seq(1, nprime[i])
+      p <- seq(0, q) * (nprime[i] - 1)/q +1
+      k <- histc(p, pp)
+      k[p >= nprime[i] ] <- nprime[i] -1
+      coeff[i, ] <- ( p - pp[k] )
+      index[i, ] <- k -offs[i]
+    }
+    switch(rtn,
+         'coeff' = return(coeff),
+         'index' = return(index))
+  }
+
+align_fitXYCOWWarpPath <-
+  function(x, y, seg, slack, print.report,
+          r.power){
+
+  ################################################
+  #make warp path for COW alignment of y with x
+  ################################################
+
+  #assuming x and y are vectors
+
+  #setup
+  equal.segments <- FALSE #if expand to shortest works
+                          #equal.segments <- TRUE not needed
+
+
+  ########################################
+  #expand shortest to length of longest
+  #######################################
+  #done to handle different x and y length
+  #might be better way to handle this?
+  offset <- 0
+  if(length(x)>length(y)){
+    #grow y
+    temp <- length(x) - length(y)
+    t1 <- ceiling(temp/2)
+    t2 <- floor(temp/2)
+    temp <- (1-t1):(length(y)+t2)
+##    offset <- 1-t1
+    offset <- t1
+    y <- approx(1:length(y), y, xout=temp, rule=2)$y
+  }
+  if(length(y)>length(x)){
+    #grow x
+    #tidy this
+    temp <- length(y) -length(x)
+    t1 <- ceiling(temp/2)
+    t2 <- floor(temp/2)
+    temp <- (1-t1):(length(x)+t2)
+##    offset <- t1
+    offset <- -t1
+    x <- approx(1:length(x), x, xout=temp, rule=2)$y
+  }
+
+  ###################################
+  #main cow fit rotuine
+  ###################################
+  #this need tidying
 
   # Initialise
   if(is.matrix(y)){
@@ -149,9 +325,8 @@ cow_align <- function(x, y, seg, slack, print.report = FALSE,
     }
     if (equal.segments) {
       nSeg <- floor((npT - 1)/seg)
-      len_segs <- matrix(floor((npT - 1)/ nSeg), nrow = 1)
+      len_segs <- matrix(floor((npT - 1)/ nSeg), nrow = 2, ncol = nSeg)
       len_segs[2, ] <- floor((dimY[2] - 1)/ nSeg)
-
       print('Segment length adjusted to the best cover the remainders')
     } else {
       nSeg = floor((npT - 1) / (seg - 1))
@@ -164,6 +339,8 @@ cow_align <- function(x, y, seg, slack, print.report = FALSE,
              equal.segments = TRUE')
       }
     }
+
+
     tmp <- (npT-1) %% len_segs[1, 1]
     if( tmp > 0) {
       len_segs[1, nSeg] <- len_segs[1, nSeg] + tmp
@@ -178,6 +355,8 @@ cow_align <- function(x, y, seg, slack, print.report = FALSE,
       }
     }
 
+
+
     tmp <- (dimY[2] - 1) %% len_segs[2, 1]
     if(tmp > 0) {
       len_segs[2, nSeg] <- len_segs[2, 1] + tmp
@@ -187,7 +366,7 @@ cow_align <- function(x, y, seg, slack, print.report = FALSE,
   bP <- cumsum(c(1, len_segs[2, ]))
   Warping <- matrix(nrow = dimY[1], ncol = (nSeg+1) )
 
-  #### Chech slack ####
+  #### Check slack ####
   if (length(slack) > 1){
     if (length(slack) <= nSeg) {
       stop('The number of slack parameters is not equal to the number of optimised segments')
@@ -304,15 +483,15 @@ cow_align <- function(x, y, seg, slack, print.report = FALSE,
           (Norm_TSeg_cen %*% Norm_Yi_seg_cen)
         CCs_Node <- ifelse(is.finite(CCs_Node), CCs_Node, 0)
         CCs_Node <- matrix(CCs_Node, nrow = n_aa, ncol = dimY[1])
-########################
-#check this is right way around
-########################
+        ########################
+        #check this is right way around
+        ########################
         if(r.power){
-          Cost_Fun = matrix(Table[2, nodes_tablePointer], nrow = n_aa ) + CCs_Node
+          Cost_Fun = matrix(Table[2, nodes_tablePointer], nrow = n_aa ) + CCs_Node^r.power
         } else {
-          Cost_Fun <- matrix(Table[2, nodes_tablePointer], nrow = n_aa) + CCs_Node^r.power
+          Cost_Fun <- matrix(Table[2, nodes_tablePointer], nrow = n_aa) + CCs_Node
         }
-#########################
+        #########################
         ind <- max(Cost_Fun)
         pos <- match(ind, Cost_Fun)
         bound_k_table[1, counting] <- ind
@@ -332,67 +511,89 @@ cow_align <- function(x, y, seg, slack, print.report = FALSE,
       Warping[i, j] <- Table[1, Pointer]
     }
   }
-  Ywarped <- NULL
-  for (i in seq(1, nSeg)) {
-    indT <- seq(bT[i], bT[i + 1])
-    lenT <- bT[i + 1] - bT[i]
-    for (j in seq(1, dimY[1])) {
-      indX <- seq(Warping[j, i], Warping[j, i + 1])
-      lenX <- Warping[j, i + 1] - Warping[j, i]
-      Ywarped[indT] <- approx(x = indX - Warping[j, i] + 1,
-                              y = y[indX],
-                              xout = seq(0, lenT)/lenT * lenX + 1 )$y
+####################################
+#to think about tidying output
+#used by
+#   align_applyXYCOWWarpPath.old
+#   align_applyXYCOWWarpPath
+#   alignment object as report
+####################################
+  list(seg=bT, seg.warped=Warping, nSeg=nSeg, offset=offset)
+}
+
+#currently not using
+#(from previous)
+align_applyXYCOWWarpPath.old <- function
+  (y, warp.path){
+    #this does not work yet...
+    nSeg <- warp.path[[3]]
+    dimY <- 1                      #can't leave this
+    bT <- warp.path[[1]]
+    Warping <- warp.path[[2]]
+    Ywarped <- NULL
+    for (i in seq(1, nSeg)) {
+      indT <- seq(bT[i], bT[i + 1])
+      lenT <- bT[i + 1] - bT[i]
+      for (j in seq(1, dimY[1])) {
+        indX <- seq(Warping[j, i], Warping[j, i + 1])
+        lenX <- Warping[j, i + 1] - Warping[j, i]
+        Ywarped[indT] <- approx(x = indX - Warping[j, i] + 1,
+                                y = y[indX],
+                                xout = seq(0, lenT)/lenT * lenX + 1 )$y
+      }
     }
+    return(Ywarped)
   }
-  return(Ywarped)
+
+
+align_applyXYCOWWarpPath <-
+  function(y, warp.path){
+
+  #########################
+  #to think about tidying
+  #########################
+  bT <- as.vector(warp.path[[2]])
+  d <- diff(warp.path[[1]])
+
+  ans <- c(bT[1])
+  for(i in 1:length(d)){
+    ans <- c(ans,
+             seq(bT[i]+1,bT[i+1], length.out=d[i]))
+  }
+  ans2 <- c(warp.path[[1]][1])
+  for(i in 1:length(d)){
+    ans2 <- c(ans2,
+             seq(warp.path[[1]][i]+1,warp.path[[1]][i+1], length.out=d[i]))
+  }
+  if(warp.path[[4]]>0){
+    ans <- ans-(warp.path[[4]] +1)
+    ans2 <- ans2-(warp.path[[4]] +1)
+    ans <- ans[ans2>0 & ans2<=nrow(y)]
+    ans2 <- ans2[ans2>0 & ans2<=nrow(y)]
+  }
+  warp_frame(y, ans2, ans)
 }
 
 
-#######################
-#not exported
-#    histc and InterpCoeff
-#######################
+##################################
+#alignment_cowAlignPlot
+##################################
 
-histc <- function(values, edges) {
-  ledges <- length(edges)
-  nlow <-  length(values[values < edges[1]])
-  nhigh <- length(values[values > edges[ledges]])
-  bin <- NULL
-  for (i in seq_along(edges)[-ledges] ) {
-    binValues <- values[values >= edges[i] & values < edges[i+1]]
-    position <- match(binValues, values)
-    bin[position] <- i
-  }
-  bin <- bin[!is.na(bin)]
-  upper <- match(edges[ledges], values)
-  if(!is.na(upper)){
-   bin[length(bin) +1 ] = i+1
-  }
-  if( nlow > 0 ){
-    bin <- c(rep(0, nlow), bin)
-  }
-  if( nhigh > 0 ){
-    bin <- c(bin, rep(0, nlow))
+#kr v.0.0.2
+#update of previous
+#using lattice::xyplot rather than plot
+#  not sure I need the importfrom if I am using lattice::fun()
+#  might change this to ggplot but dependents and installation
+#      time will increase significantly
+############################
+#to do
+############################
+#code needs tidying to allow user modification
+#
+
+alignment_cowAlignmentPlot <-
+  function(x, ...){
+    print("hi ya!")
   }
 
-  return(bin)
-}
-
-InterpCoeff <- function(n, nprime, offs, rtn) {
-  p <- length(nprime)
-  q <- n - 1
-  coeff <- matrix(nrow = p, ncol =  n)
-  index <- matrix(nrow = p, ncol =  n)
-  for (i in seq(1, p)) {
-    pp <- seq(1, nprime[i])
-    p <- seq(0, q) * (nprime[i] - 1)/q +1
-    k <- histc(p, pp)
-    k[p >= nprime[i] ] <- nprime[i] -1
-    coeff[i, ] <- ( p - pp[k] )
-    index[i, ] <- k -offs[i]
-  }
-  switch(rtn,
-         'coeff' = return(coeff),
-         'index' = return(index))
-}
 

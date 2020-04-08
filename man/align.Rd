@@ -3,7 +3,6 @@
 \docType{package}
 \name{align}
 \alias{align}
-\alias{align-package}
 \title{Data Alignment Tools}
 \description{
 Methods for the alignment and merging of partially or inexactly

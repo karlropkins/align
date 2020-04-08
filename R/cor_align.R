@@ -96,6 +96,7 @@ function(x, y = NULL, by = NULL, ...){
     #       also setup for general output management...
     #align_extraArgsHandler in unexported code
     x.args <- align_extraArgsHandler(...,
+                  default.method = "cor_align",
                   default.output = c("summary", "plot", "ans"),
                   ref.args = c("ans","plot", "offset",
                                "summary", "alignment"))
@@ -106,14 +107,15 @@ function(x, y = NULL, by = NULL, ...){
     #note
     ###########################
     #this currently limits
-    #cor_align to valid
-    #data.frames and as.data.frame()s
+    #cor_align to use with data.frames
+    #and valid as.data.frame()s
     ###########################
     #to do
     ###########################
     #handle missing x?
     #return aligned.y?
-    d <- align_XYByArgsHandler(x=x, y=y, by=by)
+    d <- align_XYByArgsHandler(x=x, y=y, by=by,
+                               method = x.args$method)
 
     #x and y cases to be used for alignment
     x <- d$x
@@ -128,7 +130,7 @@ function(x, y = NULL, by = NULL, ...){
     #   best fit if toward edge, roughly
     #   offset > 0.75 * length(y)
     #this gives consistently as good or better fit than
-    #   0.1, 0.2, so not ideal but good trade-off.
+    #   0.1, 0.2, so not ideal but good trade-off...
 
     #fit smallest to biggest
     if(length(y)>length(x)){
@@ -185,3 +187,40 @@ function(x, y = NULL, by = NULL, ...){
 }
 
 
+#unexported functions
+
+##################################
+#alignment_corAlignPlot
+##################################
+
+#kr v.0.0.2
+#update of previous
+#using lattice::xyplot rather than plot
+#  not sure I need the importfrom if I am using lattice::fun()
+#  might change this to ggplot but dependents and installation
+#      time will increase significantly
+############################
+#to do
+############################
+#code needs tidying to allow user modification
+#
+
+#' @importFrom lattice xyplot
+alignment_corrAlignmentPlot <-
+  function(x, ...){
+    lattice::xyplot(x$reports$scores~x$reports$index,
+                    type="h", xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]",
+                    panel = function(...){
+                      lattice::panel.grid(-1, -1)
+                      lattice::panel.xyplot(...)
+                      lattice::panel.abline(v = 0, col.line = "red", lty = 3)
+                      lattice::panel.abline(v = x$report$offset, col = "red",
+                                            lty = 3)
+                      if(x$report$offset!=0)
+                        lattice::panel.arrows(0, max(x$reports$scores,
+                                                     na.rm = TRUE),
+                                              x$reports$offset,
+                                              max(x$reports$scores, na.rm = TRUE),
+                                              col = "red", 0.1)
+                    })
+  }

@@ -7,14 +7,19 @@
 Based on matlab code at http://www.models.life.ku.dk/dtw_cow.
 }
 \usage{
-cow_align(x, y, seg, slack, print.report = FALSE, r.power = FALSE,
-  equal.segments = FALSE, ...)
+cow_align(x, y = NULL, by = NULL, ...)
 }
 \arguments{
-\item{x}{First \code{vector}, to be COW aligned with when merged
-data.}
+\item{x}{First \code{vector} or a \code{data.frame} containing
+\code{vector} to use as reference when COW aligning \code{y} data.}
 
-\item{y}{Second \code{vector} to COW warp align with \code{x}.}
+\item{y}{Second \code{vector} or \code{data.frame} containing
+\code{vector} to COW warp align with \code{x}.}
+
+\item{by}{If \code{x} or \code{y} are \code{data.frames}, the
+names of data columns to aligned.}
+
+\item{...}{Other arguments, currently ignored.}
 
 \item{seg}{Segment size for warping.}
 
@@ -24,12 +29,6 @@ data.}
 
 \item{r.power}{(logical or numeric) correlation power
 (1-4).}
-
-\item{equal.segments}{(logical) force equal segment lengths in
-\code{xt} and \code{xP} instead of filling up \code{xt} with N
-boundary-points.}
-
-\item{...}{Other arguments, currently ignored.}
 }
 \description{
 Non-linear alignment using Correlation Optimized
@@ -46,7 +45,7 @@ Correlation optimized warping was developed as a
 preprocessing method for chromatographic Data:
 
 Niels-Peter Vest Nielsen, Jens Micheal Carstensen
-and Jørn Smedegaard,  1998, Aligning of singel and multiple wavelength
+and Jorn Smedegaard,  1998, Aligning of singel and multiple wavelength
 chromatographic profiles for chemometric data analysis using
 correlation optimised warping. J. Chrom. A 805(1998), 17-35
 

@@ -65,7 +65,7 @@ cow <- function(Ta, X, Seg, Slack, Options) {
       len_segs <- matrix(c(tmp_segs, tmp_segs), nrow = 2)
 
       if (floor((dimX[2] -1) / (Seg - 1)) != nSeg){
-        stop('For non-fixed segment lengths the target and teh signal do not have the same number o fsegments. Try option 3 set to T')
+        stop('For non-fixed segment lengths the target and the signal do not have the same number o fsegments. Try option 3 set to T')
       }
     }
     tmp <- (npT-1) %% len_segs[1, 1]
@@ -212,7 +212,7 @@ cow <- function(Ta, X, Seg, Slack, Options) {
         if(Options[[2]]){
           Cost_Fun = matrix(Table[2, nodes_tablePointer], nrow = n_aa ) + CCs_Node
         } else {
-          Cost_Fun <- matrix(Table[2, nodes_tablePointer], nrow = n_aa) + CCs_Node^Options[2]
+          Cost_Fun <- matrix(Table[2, nodes_tablePointer], nrow = n_aa) + CCs_Node^Options[[2]]
         }
 
         ind <- max(Cost_Fun)
@@ -249,7 +249,9 @@ cow <- function(Ta, X, Seg, Slack, Options) {
                               xout = seq(0, lenT)/lenT * lenX + 1 )$y
     }
   }
-  return(Xwarped)
+  return(list(bT = bT, Warping = Warping, nSeg=nSeg,
+                Xwarped = Xwarped))
+  #return(Xwarped)
 }
 
 
