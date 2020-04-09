@@ -37,12 +37,16 @@
 #    easier unknown handling
 #    testing on print.alignment
 
+
+##############################
+#plot.alignment
+##############################
+#
+
 #splatted function
 #' @rdname alignment
 #' @export
 #' @method plot alignment
-
-#minimal for cor_alignment only
 plot.alignment <-
 function(x, ...){
   #plot method for alignment object
@@ -50,23 +54,9 @@ function(x, ...){
 #cor plot function name needs fixing
          cor_align = alignment_corAlignmentPlot(x, ...),
          cow_align = alignment_cowAlignmentPlot(x, ...),
-         {cat("[corrupted alignment object?]\n");
+         {cat("[alignment: no matched plot method]\n");
            invisible(x)}
   )
-#  if(x$method == "cor_align"){
-    ##################################################
-    #replace this with lattice plot or ggplot
-    #so ouput is actual plot rather an invisible(x)...
-    ##################################################
-#    plot(x$reports$index, x$reports$scores, type="h",
-#         xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]")
-#    abline(v=0, col="pink", lty=3)
-#    abline(v=x$report$offset, col="red", lty=3)
-#    if(x$report$offset!=0)
-#      arrows(0, max(x$reports$scores, na.rm=T), x$reports$offset ,
-#             max(x$reports$scores, na.rm=T), col="red", 0.1)
-#    invisible(x)
-#  }
 }
 
 ##################
@@ -86,12 +76,12 @@ print.alignment <-
         cor_align = paste("alignment: xy cor_alignment: ",
                     x$offset, " row offset", sep=""),
         cow_align = paste("alignment: xy cow_alignment: ",
-                          length(x$reports[[1]]), " segment warp [",
+                          length(x$reports[[1]]), " y segment warp [",
                           x$reports[[5]][1], " to ",
                           x$reports[[5]][2], "]", sep=""),
         n_align = paste("alignment: xy n_alignment: ",
                           x$offset, " row offset", sep=""),
-        "[corrupted alignment object?]"
+        "[alignment: no plot method]"
     )
     cat(ans, "\n")
     invisible(x)
@@ -103,6 +93,9 @@ print.alignment <-
 ###################
 #minimal for cor_alignment
 #minimal for cow_alignment
+
+#notes:
+#no n_align method
 
 #' @rdname alignment
 #' @method summary alignment
@@ -121,7 +114,7 @@ summary.alignment <-
           "\ty row offset: ", object$offset, "\n",
           "\txy (", nrow(object$ans), " x ",
           ncol(object$ans), ")\n", sep="")
-      invisible(object)
+      return(invisible(object))
     }
     if(object$method == "cow_align"){
       #quick for now
@@ -133,27 +126,25 @@ summary.alignment <-
         temp <- paste("offset ", object$offset, "; ", temp, sep="")
       }
       cat("alignment: cow_align\n",
-          "\tx (", nrow(object$sources$x0), "x",
+          "\tx (", nrow(object$sources$x0), " x ",
           ncol(object$sources$x0), "); ",
           "y (", nrow(object$sources$y0), " x ",
           ncol(object$sources$y0), ")\n",
           "\tcow: ", temp, "\n", "\txy (",
           nrow(object$ans), " x ", ncol(object$ans),
           ")\n", sep="")
-      invisible(object)
+      return(invisible(object))
     }
     #warn if no method?
+    cat("[alignment: no matched summary method]\n")
     invisible(NULL)
   }
-
 
 
 
 ####################################
 #misc unexported code
 ####################################
-
-#(see indivdual to do)
 
 
 ###################################
@@ -167,7 +158,7 @@ summary.alignment <-
 ###############################
 #work in progress - structure to be
 #    finalised
-#
+
 
 align_extraArgsHandler <-
   function(..., default.method = "..._align",
