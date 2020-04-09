@@ -12,9 +12,15 @@
 ################################
 #contents (all crude)
 ################################
+#exported
+################################
 #plot.alignment
 #print.alignment
 #summary.alignment
+################################
+#unexported code
+################################
+#
 
 ############################
 #to do
@@ -63,23 +69,28 @@ function(x, ...){
 #  }
 }
 
+##################
+#print.alignment
+###################
+#minimal for cor_alignment
+#minimal for n_alignment
+#minimal for cow_alignment
 
 #' @rdname alignment
 #' @method print alignment
 #' @export
-
-#minimal for cor_alignment only
 print.alignment <-
   function(x, ...){
     #using switch statement, one per ..._align method
     ans <- switch(x$method,
-        cor_align = paste("alignment: xy cor_alignment row offset: ",
-                    x$offset, sep=""),
-#cow needs doing
-        cow_align = paste("alignment: xy cow_alignment row offset: ",
-                          x$offset, sep=""),
-        n_align = paste("alignment: xy n_alignment row offset: ",
-                        x$offset, sep=""),
+        cor_align = paste("alignment: xy cor_alignment: ",
+                    x$offset, " row offset", sep=""),
+        cow_align = paste("alignment: xy cow_alignment: ",
+                          length(x$reports[[1]]), " segment warp [",
+                          x$reports[[5]][1], " to ",
+                          x$reports[[5]][2], "]", sep=""),
+        n_align = paste("alignment: xy n_alignment: ",
+                          x$offset, " row offset", sep=""),
         "[corrupted alignment object?]"
     )
     cat(ans, "\n")
@@ -87,11 +98,15 @@ print.alignment <-
   }
 
 
+##################
+#summary.alignment
+###################
+#minimal for cor_alignment
+#minimal for cow_alignment
+
 #' @rdname alignment
 #' @method summary alignment
 #' @export
-
-#minimal for cor_alignment only
 summary.alignment <-
   function(object, ...){
     #summary method for alignment object
@@ -100,21 +115,31 @@ summary.alignment <-
       #think about this
       cat("alignment: cor_align\n",
           "\tx (", nrow(object$sources$x0), "x",
-          ncol(object$sources$x0), ");\n",
-          "\ty (", nrow(object$sources$y0), "x",
-          ncol(object$sources$y0), ");\n",
-          "\ty row offset: ", object$offset, "\n")
+          ncol(object$sources$x0), "); ",
+          "y (", nrow(object$sources$y0), " x ",
+          ncol(object$sources$y0), ")\n",
+          "\ty row offset: ", object$offset, "\n",
+          "\txy (", nrow(object$ans), " x ",
+          ncol(object$ans), ")\n", sep="")
       invisible(object)
     }
     if(object$method == "cow_align"){
       #quick for now
-#cow needs doing...
+      #think about this
+      temp <- paste(length(object$reports[[1]]), " SEG warped [",
+                    object$reports[[5]][1], " - ",
+                    object$reports[[5]][2], "]", sep="")
+      if(is.null(object$offset) || object$offset!=0) {
+        temp <- paste("offset ", object$offset, "; ", temp, sep="")
+      }
       cat("alignment: cow_align\n",
           "\tx (", nrow(object$sources$x0), "x",
-          ncol(object$sources$x0), ");\n",
-          "\ty (", nrow(object$sources$y0), "x",
-          ncol(object$sources$y0), ");\n",
-          "\ty row offset: ", object$offset, "\n")
+          ncol(object$sources$x0), "); ",
+          "y (", nrow(object$sources$y0), " x ",
+          ncol(object$sources$y0), ")\n",
+          "\tcow: ", temp, "\n", "\txy (",
+          nrow(object$ans), " x ", ncol(object$ans),
+          ")\n", sep="")
       invisible(object)
     }
     #warn if no method?

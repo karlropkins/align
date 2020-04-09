@@ -182,6 +182,9 @@ cow_align.default <-
   #    align_buildAlignment in unexported code
   #    (if objects do not get anymore complicated
   #        should probably drop function and do directly)
+  temp <- as.vector(warp.path[[2]]) - warp.path[[1]]
+  warp.path$warp.range <- range(temp, na.rm=TRUE)
+
   alignment <- align_buildAlignment(method = "cow_align",
                                     ans = ans, sources = d,
                                     reports = warp.path,
@@ -579,21 +582,26 @@ align_applyXYCOWWarpPath <-
 #alignment_cowAlignPlot
 ##################################
 
-#kr v.0.0.2
-#update of previous
-#using lattice::xyplot rather than plot
+#kr v.0.0.1
+#using ggplot rather than plot
 #  not sure I need the importfrom if I am using lattice::fun()
 #  might change this to ggplot but dependents and installation
 #      time will increase significantly
 ############################
 #to do
 ############################
-#code needs tidying to allow user modification
+#tidy this
+#
 #
 
+#' @import ggplot2
 alignment_cowAlignmentPlot <-
   function(x, ...){
-    print("hi ya!")
+    df <- data.frame(index = x$reports[[1]],
+                     warp.y = as.vector(x$reports[[2]]) - x$reports[[1]])
+    ggplot(df, aes(x=index, y=warp.y)) +
+      geom_segment(aes(x=index, xend=index, y=0, yend=warp.y)) +
+      theme_bw()
   }
 
 
