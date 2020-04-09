@@ -107,7 +107,12 @@ fit_align.default <-
     #   think about warp_frame option
     #   here and previously
     ##################################
-    ans <- approx(x2, y, x1, rule = 2)
-    y <- ans$y
-    data.frame(x=x, y=y)
+    #ans <- approx(x2, y, x1, rule = 2)
+    #y <- ans$y
+    #data.frame(x=x, y=y)
+
+#replaces above currently testing
+    ans <- warp_frame(d$y0, x2, x1)
+    ans <- n_align(d$x0, ans)
+    ans
   }
