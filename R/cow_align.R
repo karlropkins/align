@@ -601,6 +601,7 @@ alignment_cowAlignmentPlot <-
                      warp.y = as.vector(x$reports[[2]]) - x$reports[[1]])
     ggplot(df, aes(x=index, y=warp.y)) +
       geom_segment(aes(x=index, xend=index, y=0, yend=warp.y)) +
+      ylab("Y Segment (COW) Shift") +
       theme_bw()
   }
 
