@@ -182,6 +182,8 @@ cow_align.default <-
   #    align_buildAlignment in unexported code
   #    (if objects do not get anymore complicated
   #        should probably drop function and do directly)
+
+  #could move this to one of the align_cowAlign... functions
   temp <- as.vector(warp.path[[2]]) - warp.path[[1]]
   warp.path$warp.range <- range(temp, na.rm=TRUE)
 
