@@ -42,7 +42,7 @@ function(x, ...){
   #plot method for alignment object
   switch(x$method,
 #cor plot function name needs fixing
-         cor_align = alignment_corrAlignmentPlot(x, ...),
+         cor_align = alignment_corAlignmentPlot(x, ...),
          cow_align = alignment_cowAlignmentPlot(x, ...),
          {cat("[corrupted alignment object?]\n");
            invisible(x)}

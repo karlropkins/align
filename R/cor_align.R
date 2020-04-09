@@ -206,7 +206,7 @@ function(x, y = NULL, by = NULL, ...){
 #
 
 #' @importFrom lattice xyplot
-alignment_corrAlignmentPlot <-
+alignment_corAlignmentPlot <-
   function(x, ...){
     lattice::xyplot(x$reports$scores~x$reports$index,
                     type="h", xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]",

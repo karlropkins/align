@@ -22,7 +22,7 @@ Non-linear alignment using Correlation Optimized
 warping.
 }
 \note{
-\code{cow} is based on similar matlab. (to document)
+\code{cow} is based on similar matlab (to document)
 }
 \references{
 (to document)

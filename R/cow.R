@@ -11,7 +11,7 @@
 #' @param Slack Segment size expansion/compression range.
 #' @param Options Other options (to documet).
 #' @author Daniel Quiroz Moreno
-#' @note \code{cow} is based on similar matlab. (to document)
+#' @note \code{cow} is based on similar matlab (to document)
 #' @references (to document)
 
 #splatted function
