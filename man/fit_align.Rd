@@ -4,18 +4,23 @@
 \alias{fit_align}
 \title{fit_align}
 \usage{
-fit_align(x, y, fun = function(par, x) par[1] + (par[2] * x), ...)
+fit_align(x, y = NULL, by = NULL, ...)
 }
 \arguments{
-\item{x}{A first time-series \code{vector}, to use a reference when
-warping \code{y}.}
+\item{x}{A first time-series \code{vector} or a \code{data.frame}
+containing time-series to use a reference when warp-fitting
+\code{y}.}
 
-\item{y}{A second time-series \code{vector}, to warp align with \code{x}.}
+\item{y}{A second time-series \code{vector} or a \code{data.frame}
+containing time-series to warp-fit with \code{x}.}
 
-\item{fun}{A \code{function} describing the time-offsetting model to be
-applied.}
+\item{by}{If \code{x} or \code{y} are \code{data.frames}, the names
+of time-series to warp-fit.}
 
 \item{...}{Other arguments, currently ignored.}
+
+\item{fun}{A \code{function} describing the warp-fitting model to
+be applied.}
 }
 \description{
 Time warp a data-series using a time-offsetting model.

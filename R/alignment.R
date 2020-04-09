@@ -174,7 +174,7 @@ align_extraArgsHandler <-
     if(!"method" %in% names(extra.args))
       extra.args$method <- default.method
     if(!extra.args$method[1] %in% c("n_align", "cor_align",
-                                    "cow_align")){
+                                    "cow_align", "fit_align")){
       #not sure this should be user option...
       stop(paste("no '", extra.args$method[1], "' alignment method",
                  sep = ""), call. = FALSE)
