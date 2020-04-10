@@ -99,7 +99,7 @@ warp_frame <-
       #object classes
       ################################
       if (is.numeric(x[, i]))
-        new.df[, i] <- approx(old.x, x[, i], new.x, rule = 2)$y
+        new.df[, i] <- approx(old.x, x[, i], new.x, rule = 1)$y
       if (is.factor(x[, i]) || is.character(x[, i])) {
         #############################
         #factor correction needs

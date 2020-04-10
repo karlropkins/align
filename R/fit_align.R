@@ -93,15 +93,16 @@ fit_align.default <-
     log <- capture.output({
       ans <- RcppDE::DEoptim(function(par){
         x2 <- fun(par, x.index)
-        ans <- approx(x2, y, x1, rule = 2)
+        ans <- approx(x2, y, x1, rule = 1)
         y <- ans$y
-        ans <- 2-cor(x,y, use="pairwise.complete.obs")
-        print(ans)
-        ans <- if(is.na(ans)) 100 else ans
-        ans <- ans * length(x1[!is.na(x1) & !is.na(y)])
-        #sum((x-y)^2)    #only works because x,y same size
+        #ans <- 2-cor(x,y, use="pairwise.complete.obs")
+        #print(ans)
+        #ans <- if(is.na(ans)) 100 else ans
+        #ans <- ans * length(x1[!is.na(x1) & !is.na(y)])
+        sum((x-y)^2, na.rm=TRUE)
+                        #only works because x,y same size
                         #NA handling needs thinking about
-      }, lower, upper)
+      }, lower, upper, control=list(itermax=1000))
     })
 
     refs <- ans$optim$bestmem
@@ -116,7 +117,7 @@ fit_align.default <-
     #   outputs - can go once that is
     #   sorted
     ##################################
-    ans2 <- approx(x2, y, x1, rule = 2)
+    ans2 <- approx(x2, y, x1, rule = 1)
     #this used to be rule 2...
     y <- ans2$y
     ans2 <-data.frame(x=x, y=y)
