@@ -20,5 +20,4 @@ Imports:
     Rcpp,
     dplyr,
     RcppDE,
-    lattice,
     ggplot2
