@@ -193,34 +193,61 @@ function(x, y = NULL, by = NULL, ...){
 #alignment_corAlignPlot
 ##################################
 
-#kr v.0.0.2
+#kr v.0.0.3
 #update of previous
-#using lattice::xyplot rather than plot
-#  not sure I need the importfrom if I am using lattice::fun()
-#  might change this to ggplot but dependents and installation
-#      time will increase significantly
+#plot, then lattice::xyplot, now ggplot2::ggplot
+#  not sure what works best here
 ############################
 #to do
 ############################
 #code needs tidying to allow user modification
 #
 
-#' @importFrom lattice xyplot
+#' @import ggplot2
 alignment_corAlignmentPlot <-
   function(x, ...){
-    lattice::xyplot(x$reports$scores~x$reports$index,
-                    type="h", xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]",
-                    panel = function(...){
-                      lattice::panel.grid(-1, -1)
-                      lattice::panel.xyplot(...)
-                      lattice::panel.abline(v = 0, col.line = "red", lty = 3)
-                      lattice::panel.abline(v = x$report$offset, col = "red",
-                                            lty = 3)
-                      if(x$report$offset!=0)
-                        lattice::panel.arrows(0, max(x$reports$scores,
-                                                     na.rm = TRUE),
-                                              x$reports$offset,
-                                              max(x$reports$scores, na.rm = TRUE),
-                                              col = "red", 0.1)
-                    })
+    #basic plot
+#this needs some argument passing?
+#blue lines? if so, make other plots similar..?
+    df <- data.frame(index = x$reports$index,
+                     scores = x$reports$scores)
+    plt <- ggplot(df) +
+      geom_segment(aes(x=index, xend=index, y=0, yend=scores)) +
+      geom_vline(xintercept = 0, col="red", linetype="dotted") +
+      geom_vline(xintercept = x$report$offset, col="red",
+                 linetype="dotted") +
+      xlab("X/Y Lag [Rows]") +
+      ylab("Correlation [R]") +
+      theme_bw()
+    if(x$report$offset!=0){
+#this should be tidied
+#arrow not good
+#could add text saying offset?
+      ref <- max(df$scores, na.rm=TRUE)
+      plt <- plt +
+        geom_segment(x=x$offset, xend=0, y=ref, yend=ref,
+          arrow = arrow(length=unit(0.30,"cm"),
+                  ends="first", type = "closed"),
+          col="red")
+    }
+    plt
   }
+
+#alignment_corAlignmentPlot <-
+#  function(x, ...){
+#    lattice::xyplot(x$reports$scores~x$reports$index,
+#                    type="h", xlab = "X/Y Lag [Rows]", ylab = "Correlation [R]",
+#                    panel = function(...){
+#                      lattice::panel.grid(-1, -1)
+#                      lattice::panel.xyplot(...)
+#                      lattice::panel.abline(v = 0, col.line = "red", lty = 3)
+#                      lattice::panel.abline(v = x$report$offset, col = "red",
+#                                            lty = 3)
+#                      if(x$report$offset!=0)
+#                        lattice::panel.arrows(0, max(x$reports$scores,
+#                                                     na.rm = TRUE),
+#                                              x$reports$offset,
+#                                              max(x$reports$scores, na.rm = TRUE),
+#                                              col = "red", 0.1)
+#                    })
+#  }
