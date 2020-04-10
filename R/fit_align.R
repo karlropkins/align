@@ -16,6 +16,8 @@
 #' of time-series to warp-fit.
 #' @param fun A \code{function} describing the warp-fitting model to
 #' be applied.
+#' @param lower The lowest values for \code{fun}, one per parameter.
+#' @param upper The highest values for \code{fun}, one per parameter.
 #' @param ... Other arguments, currently ignored.
 #' @author Karl Ropkins
 
@@ -29,10 +31,8 @@
 #    not be best option...
 #tidy fun handling and fun input handling,
 #    so more flexible
-#add common by and output handling
-#think about print, plot, summary and
-#    aligment outputs
-#
+#basic alignment outputs sorted
+#    but could all be tidied
 
 ##################################
 #currently
@@ -41,10 +41,7 @@
 # by added/document
 #################################
 #to do
-# data.frame output handling
-# object building functions
-# print, plot, summary handling
-# probably more
+#various tidying
 #      see notes in function
 ##################################
 
@@ -61,7 +58,9 @@ fit_align <-
 #' @method cow_align default
 fit_align.default <-
   function(x, y=NULL, by=NULL,
-           fun = function(par, x) par[1] + (par[2]*x), ...){
+           fun = function(par, x) par[1] + (par[2]*x),
+           lower = c(-60, -3), upper = c(60, 3),
+           ...){
     #from sleeper.service
     #chopped front & end down, removed PEMS handling
     #tidy default settings
@@ -89,30 +88,75 @@ fit_align.default <-
     #tried optim, nls, nlm, GenSA,
 
     #using capture.output to hide DEoptim messages...
+    #and cor messages
+    #might need to kill warnings as well...
     log <- capture.output({
       ans <- RcppDE::DEoptim(function(par){
         x2 <- fun(par, x.index)
         ans <- approx(x2, y, x1, rule = 2)
         y <- ans$y
-        sum((x-y)^2)    #only works because x,y same size
+        ans <- 2-cor(x,y, use="pairwise.complete.obs")
+        print(ans)
+        ans <- if(is.na(ans)) 100 else ans
+        ans <- ans * length(x1[!is.na(x1) & !is.na(y)])
+        #sum((x-y)^2)    #only works because x,y same size
                         #NA handling needs thinking about
-      }, c(-60, -3), c(60, 3))
+      }, lower, upper)
     })
 
     refs <- ans$optim$bestmem
-    cat(deparse(fun), "\nBest fit: ", refs)
+#moved to print
+#    cat(deparse(fun), "\nBest fit: ", refs)
     x2 <- fun(refs, x.index)
+
+#return(ans)
+
     ##################################
-    #this is repeated code
-    #   think about warp_frame option
-    #   here and previously
+    #this being kept to compare new/old
+    #   outputs - can go once that is
+    #   sorted
     ##################################
-    #ans <- approx(x2, y, x1, rule = 2)
-    #y <- ans$y
-    #data.frame(x=x, y=y)
+    ans2 <- approx(x2, y, x1, rule = 2)
+    #this used to be rule 2...
+    y <- ans2$y
+    ans2 <-data.frame(x=x, y=y)
 
 #replaces above currently testing
-    ans <- warp_frame(d$y0, x2, x1)
-    ans <- n_align(d$x0, ans)
-    ans
+    ans3 <- warp_frame(d$y0, x2, x1)
+    ans3 <- n_align(d$x0, ans3)
+
+#not keeping ans2 once ans3 sorted
+#rationalise ans, again might not keep all...
+    alignment <- align_buildAlignment(method = "fit_align",
+                                      ans = ans2, old.ans = ans3,
+                                      sources = d,
+                                      reports = ans,
+                                      fun = fun)
+    align_output(alignment, x.args$output)
   }
+
+
+
+#####################################
+#unexported functions
+#####################################
+
+#####################################
+#alignment_fitAlignmentPlot
+#####################################
+
+#kr v0.0.1
+
+#' @import ggplot2
+alignment_fitAlignmentPlot <-
+  function(x, ...){
+    df <- data.frame(iteration = 1:length(x$reports$member$bestvalit),
+                     scores = x$reports$member$bestvalit)
+    ggplot(df, aes(x=iteration, y=scores)) +
+      #geom_point() +
+      geom_path(aes(x=iteration, y=scores)) +
+      ylab("Warp (Fit) Score") +
+      xlab("Fit Iteration") +
+      theme_bw()
+  }
+

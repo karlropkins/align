@@ -21,6 +21,10 @@ of time-series to warp-fit.}
 
 \item{fun}{A \code{function} describing the warp-fitting model to
 be applied.}
+
+\item{lower}{The lowest values for \code{fun}, one per parameter.}
+
+\item{upper}{The highest values for \code{fun}, one per parameter.}
 }
 \description{
 Time warp a data-series using a time-offsetting model.

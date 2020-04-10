@@ -20,28 +20,33 @@
 ################################
 #unexported code
 ################################
-#
+#[to list]
 
 ############################
 #to do
 ############################
 #tidy documentation
+# describe usage and object handling...
 #tidy all alignment generics (currently very rough)
 #work up for other ..._align functions (currently just cAlign)
 #could put all the alignment object handling on one page
 #    or on same page as parent ..._align() is we use dedicated
 #    alignment objects, so n_alignment, cor_alignment, etc?
-#could convert from if to switch structure
-#    might be easier to follow that 'nested if'?
-#    should be quicker?
-#    easier unknown handling
+
+############################
+#to think about
+############################
+#converted from if to switch structure
+#    might be better, faster option
+#    will still need more tidying once outputs finished
 #    testing on print.alignment
+#summary is not really a summary...
 
 
 ##############################
 #plot.alignment
 ##############################
-#
+#plot functions are in _align .r files
 
 #splatted function
 #' @rdname alignment
@@ -54,8 +59,9 @@ function(x, ...){
 #cor plot function name needs fixing
          cor_align = alignment_corAlignmentPlot(x, ...),
          cow_align = alignment_cowAlignmentPlot(x, ...),
+         fit_align = alignment_fitAlignmentPlot(x, ...),
          {cat("[alignment: no matched plot method]\n");
-           invisible(x)}
+          invisible(x)}
   )
 }
 
@@ -79,6 +85,9 @@ print.alignment <-
                           length(x$reports[[1]]), " y segment warp [",
                           x$reports[[5]][1], " to ",
                           x$reports[[5]][2], "]", sep=""),
+        fit_align = paste("alignment: xy fit_alignment: ",
+                          paste(deparse(x$fun), collapse = ""),
+                          sep=""),
         n_align = paste("alignment: xy n_alignment: ",
                           x$offset, " row offset", sep=""),
         "[alignment: no plot method]"
@@ -107,7 +116,7 @@ summary.alignment <-
       #quick for now
       #think about this
       cat("alignment: cor_align\n",
-          "\tx (", nrow(object$sources$x0), "x",
+          "\tx (", nrow(object$sources$x0), " x ",
           ncol(object$sources$x0), "); ",
           "y (", nrow(object$sources$y0), " x ",
           ncol(object$sources$y0), ")\n",
@@ -133,6 +142,21 @@ summary.alignment <-
           "\tcow: ", temp, "\n", "\txy (",
           nrow(object$ans), " x ", ncol(object$ans),
           ")\n", sep="")
+      return(invisible(object))
+    }
+    if(object$method == "fit_align"){
+      #quick for now
+      #think about this
+      temp <- paste(object$reports$optim$bestmem,
+                    collapse = ",", sep="")
+      cat("alignment: fit_align\n",
+          "\tx (", nrow(object$sources$x0), " x ",
+          ncol(object$sources$x0), "); ",
+          "y (", nrow(object$sources$y0), " x ",
+          ncol(object$sources$y0), ")\n",
+          "\ty warp function: ",
+          deparse(object$fun), "\n\t[", temp, "]\n",
+          sep="")
       return(invisible(object))
     }
     #warn if no method?
