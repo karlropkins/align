@@ -29,8 +29,13 @@
 #documentation needs updating
 #review third party methods - RcppDE might
 #    not be best option...
+#    tried optim, nls, nlm, GenSA...
 #tidy fun handling and fun input handling,
 #    so more flexible
+#    pass control... to RcppDE::DEoptim
+#    same re optimisation function...
+#check fun handling in RcppDE::DEoptim
+#    worked but looks odd...
 #basic alignment outputs sorted
 #    but could all be tidied
 
@@ -59,13 +64,12 @@ fit_align <-
 fit_align.default <-
   function(x, y=NULL, by=NULL,
            fun = function(par, x) par[1] + (par[2]*x),
-           lower = c(-60, -3), upper = c(60, 3),
+           lower = c(-60, 0.3), upper = c(60, 3),
            ...){
     #from sleeper.service
     #chopped front & end down, removed PEMS handling
-    #tidy default settings
 
-
+    #using align_extraArgsHandler to handle x.args
     x.args <- align_extraArgsHandler(...,
                                      default.method = "fit_align",
                                      default.output = c("summary", "plot", "ans"),
@@ -79,60 +83,67 @@ fit_align.default <-
     y <- d$y
 
     #set up
-    target.ln <- length(x)
-    x1 <- 1:target.ln
+    x1 <- 1:length(x)
     x.index <- 1:length(y)
 
-    #messy jitter (needed?)
+    #jitter needed for perfect cases?
     #    (tested with) y <- y + (rnorm(length(y))*0.01)
-    #tried optim, nls, nlm, GenSA,
 
     #using capture.output to hide DEoptim messages...
-    #and cor messages
     #might need to kill warnings as well...
     log <- capture.output({
       ans <- RcppDE::DEoptim(function(par){
         x2 <- fun(par, x.index)
         ans <- approx(x2, y, x1, rule = 1)
         y <- ans$y
-        #ans <- 2-cor(x,y, use="pairwise.complete.obs")
-        #print(ans)
-        #ans <- if(is.na(ans)) 100 else ans
-        #ans <- ans * length(x1[!is.na(x1) & !is.na(y)])
-        sum((x-y)^2, na.rm=TRUE)
-                        #only works because x,y same size
-                        #NA handling needs thinking about
-      }, lower, upper, control=list(itermax=1000))
+##        ans <- 2-cor(x,y, use="pairwise.complete.obs")
+##        ans <- if(is.na(ans)) 1000 else ans
+#        ans
+        ans <- sum((x-y)^2, na.rm=TRUE)
+#above nice if you are chasing x=y
+#        ans <- ans / length(x1[!is.na(x) & !is.na(y)])
+        if(is.na(ans)) return(100*length(x))
+        ans <- ans / length(x[!is.na(x) & !is.na(y)])
+        if(is.na(ans)) return(100*length(x))
+        ans
+#need to find better optimisation function...
+#x,y need to be same size for second version
+#    look at discussion in ?RcppDE::DEoptim
+#also NA handling needs thinking about
+      }, lower, upper, control=list(F=0.1))
     })
 
     refs <- ans$optim$bestmem
-#moved to print
-#    cat(deparse(fun), "\nBest fit: ", refs)
-    x2 <- fun(refs, x.index)
 
-#return(ans)
+    x2 <- fun(refs, x.index)
+    temp <- range(c(x1,x2), na.rm=TRUE)
+    temp <- floor(temp[1]):ceiling(temp[2])
 
     ##################################
     #this being kept to compare new/old
     #   outputs - can go once that is
     #   sorted
     ##################################
-    ans2 <- approx(x2, y, x1, rule = 1)
-    #this used to be rule 2...
+    ans2 <- approx(x2, y, temp, rule = 1)
     y <- ans2$y
-    ans2 <-data.frame(x=x, y=y)
+    ans2 <-n_align(x=x, y=y, n=min(temp, na.rm=TRUE)-1)
 
-#replaces above currently testing
-    ans3 <- warp_frame(d$y0, x2, x1)
-    ans3 <- n_align(d$x0, ans3)
+    #ans2 at moment work but only for vectors
 
-#not keeping ans2 once ans3 sorted
-#rationalise ans, again might not keep all...
+    #replaces above currently testing
+    #    ans3 <- warp_frame(d$y0, x2, x1)
+    ans3 <- warp_frame(d$y0, x2, temp)
+    ans3 <- n_align(d$x0, ans3, n=min(temp, na.rm=TRUE)-1)
+
+    #not keeping ans2 once ans3 sorted
+    #rationalise ans, again might not keep all...
     alignment <- align_buildAlignment(method = "fit_align",
-                                      ans = ans2, old.ans = ans3,
+                                      ans = ans3, old.ans = ans2,
                                       sources = d,
                                       reports = ans,
                                       fun = fun)
+
+    #output as alignment
     align_output(alignment, x.args$output)
   }
 
@@ -147,6 +158,12 @@ fit_align.default <-
 #####################################
 
 #kr v0.0.1
+
+#####################################
+#to do
+#####################################
+#provisional plot
+#   think about something better...
 
 #' @import ggplot2
 alignment_fitAlignmentPlot <-
