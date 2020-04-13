@@ -72,7 +72,8 @@
 #   this is meant to handle different
 #   length x and y
 #replaced with pad.method
-#
+#   works but need to think about
+#   na handling by this function
 ###################################
 
 
