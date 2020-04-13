@@ -17,6 +17,9 @@
 #' @param print.report (logical) print segment report.
 #' @param r.power (logical or numeric) correlation power
 #' (1-4).
+#' @param pad.method Handling method if \code{x} and \code{y} are
+#' different lengths: 1 (default) Start with start-points aligned;
+#' 2 Start with mid-point aligned.
 #' @param ... Other arguments, currently ignored.
 #' @note This function is based on previous matlab (see Source),
 #' but some formal arguments and parameters have been changed to
@@ -56,10 +59,22 @@
 #think about alignment output, plot,
 #   summary outputs
 
+
 ###################################
 #to look at
 ###################################
+#cow handling of posix
+
+###################################
+#kr working on
+###################################
 #equal.segments kills it...
+#   this is meant to handle different
+#   length x and y
+#replaced with pad.method
+#
+###################################
+
 
 ###############################
 #from previous help
@@ -135,6 +150,7 @@ cow_align.default <-
   function(x, y=NULL, by=NULL,
            seg, slack,
            print.report = FALSE, r.power = FALSE,
+           pad.method = 1,
            ...)
   {
 
@@ -159,7 +175,9 @@ cow_align.default <-
   warp.path <- align_fitXYCOWWarpPath(x=d$x, y=d$y, seg=seg,
                                       slack=slack,
                                       print.report=print.report,
-                                      r.power=r.power)
+                                      r.power=r.power,
+                                      pad.method = pad.method)
+
 
   #replaced option[1] with print.report
   #replaced option[2] with r.power, can be 1-4
@@ -177,7 +195,6 @@ cow_align.default <-
   #use n_align to merge full x0 and warped y0
   ans <- n_align(d$x0, ywarped, n=warp.path$offset,
                  output = "ans")
-
   #make alignment object
   #    align_buildAlignment in unexported code
   #    (if objects do not get anymore complicated
@@ -190,7 +207,7 @@ cow_align.default <-
   alignment <- align_buildAlignment(method = "cow_align",
                                     ans = ans, sources = d,
                                     reports = warp.path,
-                                    offset = warp.path$offset)
+                                    padding = x.args$padding)
 
   #output
   #align_output in unexported code
@@ -255,7 +272,7 @@ InterpCoeff <-
 
 align_fitXYCOWWarpPath <-
   function(x, y, seg, slack, print.report,
-          r.power){
+          r.power, pad.method=1){
 
   ################################################
   #make warp path for COW alignment of y with x
@@ -266,34 +283,53 @@ align_fitXYCOWWarpPath <-
   #setup
   equal.segments <- FALSE #if expand to shortest works
                           #equal.segments <- TRUE not needed
+  #replacing this with padding
 
-
-  ########################################
-  #expand shortest to length of longest
-  #######################################
-  #done to handle different x and y length
-  #might be better way to handle this?
+  #################################################
+  #expand shortest of x and y to length of longest
+  #################################################
+  #default pad end of shortest with NAs
+  #
   offset <- 0
-  if(length(x)>length(y)){
-    #grow y
-    temp <- length(x) - length(y)
-    t1 <- ceiling(temp/2)
-    t2 <- floor(temp/2)
-    temp <- (1-t1):(length(y)+t2)
-##    offset <- 1-t1
-    offset <- t1
-    y <- approx(1:length(y), y, xout=temp, rule=2)$y
-  }
-  if(length(y)>length(x)){
-    #grow x
-    #tidy this
-    temp <- length(y) -length(x)
-    t1 <- ceiling(temp/2)
-    t2 <- floor(temp/2)
-    temp <- (1-t1):(length(x)+t2)
-##    offset <- t1
-    offset <- -t1
-    x <- approx(1:length(x), x, xout=temp, rule=2)$y
+  if(pad.method==1){
+    #default pad end of shortest
+    if(length(x)>length(y)){
+      #grow y
+      temp <- length(x) - length(y)
+      temp <- 1:(length(y)+temp)
+      y <- approx(1:length(y), y, xout=temp, rule=2)$y
+    }
+    if(length(y)>length(x)){
+      #grow y
+      temp <- length(y) - length(x)
+      temp <- 1:(length(x)+temp)
+      x <- approx(1:length(x), x, xout=temp, rule=2)$y
+    }
+#    print(length(x))
+#    print(length(y))
+  } else {
+    #put shortest to mid-point by 50% padding either end.
+    if(length(x)>length(y)){
+      #grow y
+      temp <- length(x) - length(y)
+      t1 <- ceiling(temp/2)
+      t2 <- floor(temp/2)
+      temp <- (1-t1):(length(y)+t2)
+      ##    offset <- 1-t1
+      offset <- t1
+      y <- approx(1:length(y), y, xout=temp, rule=2)$y
+    }
+    if(length(y)>length(x)){
+      #grow x
+      #tidy this
+      temp <- length(y) -length(x)
+      t1 <- ceiling(temp/2)
+      t2 <- floor(temp/2)
+      temp <- (1-t1):(length(x)+t2)
+      ##    offset <- t1
+      offset <- -t1
+      x <- approx(1:length(x), x, xout=temp, rule=2)$y
+    }
   }
 
   ###################################
@@ -576,6 +612,13 @@ align_applyXYCOWWarpPath <-
     ans <- ans[ans2>0 & ans2<=nrow(y)]
     ans2 <- ans2[ans2>0 & ans2<=nrow(y)]
   }
+
+########################
+#for current padding methods
+if(max(ans2)>dim(y)[1]) ans2 <- ans2[1:dim(y)[1]]
+#might want to test this is not just making
+#ans2 1:nrow(y)....
+#########################
   warp_frame(y, ans2, ans)
 }
 

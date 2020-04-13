@@ -31,7 +31,10 @@
 #############################
 #to do
 #############################
-#
+#warping non-numeric time-series
+#   both factors and posix
+#   need work....
+
 
 #' @export
 warp <-
@@ -84,6 +87,11 @@ warp_frame <-
     #check final version in
     #sleeper.service was not better...
     ###########################
+    #also think about old.x
+    #could default to 1:nrow(x)?
+    #most times it'll be that...
+    ###########################
+
     new.df <- if(length(new.x) < length(old.x)){
       as.data.frame(x[1:length(new.x),])
     } else {
@@ -99,7 +107,10 @@ warp_frame <-
       #object classes
       ################################
       if (is.numeric(x[, i]))
-        new.df[, i] <- approx(old.x, x[, i], new.x, rule = 1)$y
+        new.df[, i] <- approx(old.x, x[, i], new.x, rule = 1,
+                              ties=min)$y
+        #ties arg added to approx to stop regularize.values
+        #warning 'collapsing to unique 'x' values'
       if (is.factor(x[, i]) || is.character(x[, i])) {
         #############################
         #factor correction needs
@@ -110,6 +121,10 @@ warp_frame <-
         if(is.na(new.df[j, i])) new.df[j, i] <- new.df[j - 1, i]
       }
       if (any(c("POSIXct", "POSIXt") %in% class(x[, i]))) {
+        #####################################
+        #posix handlign needs thinking about
+        #this works because data is 1Hz...
+        #####################################
         new.df[, i] <- x[1, i] + new.x
       }
     }

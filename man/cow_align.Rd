@@ -29,6 +29,10 @@ names of data columns to aligned.}
 
 \item{r.power}{(logical or numeric) correlation power
 (1-4).}
+
+\item{pad.method}{Handling method if \code{x} and \code{y} are
+different lengths: 1 (default) Start with start-points aligned;
+2 Start with mid-point aligned.}
 }
 \description{
 Non-linear alignment using Correlation Optimized
