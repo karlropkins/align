@@ -63,7 +63,9 @@
 ###################################
 #to look at
 ###################################
-#cow handling of posix
+#cow handling of NAs (see below)
+#plot when no warping applied...
+#
 
 ###################################
 #kr working on

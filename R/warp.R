@@ -35,6 +35,11 @@
 #   both factors and posix
 #   need work....
 
+#############################
+#to think about
+#############################
+#warp_frame old.x default
+#     see below
 
 #' @export
 warp <-
