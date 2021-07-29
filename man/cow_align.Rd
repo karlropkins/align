@@ -49,7 +49,7 @@ Correlation optimized warping was developed as a
 preprocessing method for chromatographic Data:
 
 Niels-Peter Vest Nielsen, Jens Micheal Carstensen
-and Jorn Smedegaard,  1998, Aligning of singel and multiple wavelength
+and Jorn Smedegaard,  1998, Aligning of single and multiple wavelength
 chromatographic profiles for chemometric data analysis using
 correlation optimised warping. J. Chrom. A 805(1998), 17-35
 
