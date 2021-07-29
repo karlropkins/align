@@ -30,7 +30,7 @@
 #' preprocessing method for chromatographic Data:
 #'
 #' Niels-Peter Vest Nielsen, Jens Micheal Carstensen
-#' and Jorn Smedegaard,  1998, Aligning of singel and multiple wavelength
+#' and Jorn Smedegaard,  1998, Aligning of single and multiple wavelength
 #' chromatographic profiles for chemometric data analysis using
 #' correlation optimised warping. J. Chrom. A 805(1998), 17-35
 #'
@@ -108,7 +108,7 @@
 #     %          index in target ("xt", "warping" is shift compared to this) and sample ("xP"), search range in "xP", computation time
 #     %          (note: diagnostics are only saved for one - the last - signal in "xP")
 #
-#     % based on: Niels-Peter Vest Nielsen, Jens Micheal Carstensen and Jørn Smedegaard 'Aligning of singel and multiple
+#     % based on: Niels-Peter Vest Nielsen, Jens Micheal Carstensen and Jorn Smedegaard 'Aligning of singel and multiple
 #       wavelength chromatographic profiles for chemometric data analysis using correlation optimised warping'
 #       J. Chrom. A 805(1998)17-35
 #
