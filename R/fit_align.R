@@ -41,9 +41,7 @@
 
 ##################################
 #currently
-# (KR) making alignment class
-# front end handlers added
-# by added/document
+# (KR) recoding weighting function
 #################################
 #to do
 #various tidying
@@ -96,15 +94,22 @@ fit_align.default <-
         x2 <- fun(par, x.index)
         ans <- approx(x2, y, x1, rule = 1)
         y <- ans$y
-##        ans <- 2-cor(x,y, use="pairwise.complete.obs")
-##        ans <- if(is.na(ans)) 1000 else ans
-#        ans
-        ans <- sum((x-y)^2, na.rm=TRUE)
+########################
+#replace next bit with a
+#arg supplied function
+########################
+        ans <- 2-cor(x,y, use="pairwise.complete.obs")
+        ans <- if(is.na(ans)) Inf else ans
+#        ans <- sum((x-y)^2, na.rm=TRUE)
 #above nice if you are chasing x=y
+#print(length(x1[!is.na(x) & !is.na(y)]))
+        if(length(x1[!is.na(x) & !is.na(y)])<50)
+           ans <- Inf
+
 #        ans <- ans / length(x1[!is.na(x) & !is.na(y)])
-        if(is.na(ans)) return(100*length(x))
-        ans <- ans / length(x[!is.na(x) & !is.na(y)])
-        if(is.na(ans)) return(100*length(x))
+#        if(is.na(ans)) return(100*length(x))
+#        ans <- ans / length(x[!is.na(x) & !is.na(y)])
+#        if(is.na(ans)) return(100*length(x))
         ans
 #need to find better optimisation function...
 #x,y need to be same size for second version
