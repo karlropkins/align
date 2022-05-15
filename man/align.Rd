@@ -5,8 +5,8 @@
 \alias{align}
 \title{Data Alignment Tools}
 \description{
-Methods for the alignment and merging of partially or inexactly
-aligned data.
+Methods for the alignment and merging of partially or
+inexactly aligned data.
 }
 \details{
 This is a splat packed in-development package.
