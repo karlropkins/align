@@ -2,8 +2,8 @@
 #' Data Alignment Tools
 ##################################################
 #'
-#' Methods for the alignment and merging of partially or inexactly
-#' aligned data.
+#' Methods for the alignment and merging of partially or
+#' inexactly aligned data.
 #'
 #' This is a splat packed in-development package.
 #'

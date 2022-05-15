@@ -18,6 +18,6 @@ This package was created as... [to finish]
 Contributions are very welcome [to finish].
 
 ## License
-GLP-3
+GPL-3
 
 
