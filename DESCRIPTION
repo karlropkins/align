@@ -8,7 +8,7 @@ Authors@R: c( person(c("Daniel", "Quiroz"), "Moreno",
        email="cristianquirozd1997@gmail.com", role= c("aut")), person("Karl", "Ropkins",
        email="karl.ropkins@gmail.com", role= c("aut", 
        "cre")) )
-License: GLP-3
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
