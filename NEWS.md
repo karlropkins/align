@@ -1,13 +1,9 @@
-## v0.0 - Release Notes
+# AQEval version 0.0
 
-### Miscellaneous
+* Package released for beta testing 
 
-* Package splatted into existance
-
-### v0.0.1 
-
-* 
-
-### v0.0.2
-
-* 
+    * __v 0.0.1__ [2021-05-10] Package functions taken from R::pems.utils; COW functions from Daniel added, standardized and default object class added.      
+    * __v 0.0.2__ [2022-05-16] Package update and tidy; readme to rmd; updated license; added code of conduct and contributor guidance...
+    
+    
+    

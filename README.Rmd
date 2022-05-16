@@ -34,11 +34,10 @@ install.packages("devtools") #if you don't already have it
 devtools::install_github("KarlRopkins/align")
 ```
 
-## Background
-This package was created as... [to finish]
+
 
 ## Contributing
-Contributions are very welcome [to finish].
+Contributions are very welcome, using tidyverse contribution and code of conduct but not as strict as them regarding coding style...   
 
 ## License
 GPL-3
