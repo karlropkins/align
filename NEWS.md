@@ -4,3 +4,10 @@
 
 * Package splatted into existance
 
+### v0.0.1 
+
+* 
+
+### v0.0.2
+
+* 
