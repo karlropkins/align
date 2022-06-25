@@ -1,13 +1,16 @@
 Package: align
 Title: Data Alignment Tools
-Version: 0.0.2
+Version: 0.0.3
 Date: 2022-05-16
-Description: Methods for the alignment and merging of partially or inexactly
-        aligned data.
-Authors@R: c( person(c("Daniel", "Quiroz"), "Moreno",
-        email="cristianquirozd1997@gmail.com", role= c("aut")),
-        person("Karl", "Ropkins", email="karl.ropkins@gmail.com", role=
-        c("aut", "cre")) )
+Description: Methods for the alignment and
+     merging of partially or inexactly aligned
+     data.
+Authors@R: c( person(c("Daniel", "Quiroz"),
+     "Moreno",
+     email="cristianquirozd1997@gmail.com",
+     role= c("aut")), person("Karl", "Ropkins",
+     email="karl.ropkins@gmail.com", role=
+     c("aut", "cre")) )
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
