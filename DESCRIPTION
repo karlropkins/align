@@ -1,6 +1,6 @@
 Package: align
 Title: Data Alignment Tools
-Version: 0.0.3
+Version: 0.0.4
 Date: 2022-06-25
 Description: Methods for the alignment and
      merging of partially or inexactly aligned
