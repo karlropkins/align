@@ -10,5 +10,3 @@
     
     * __v 0.0.5__ [2022-06-30] added provisional website.
     
-    
-    

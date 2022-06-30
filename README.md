@@ -1,9 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- badges: start -->
-<!-- badges: end -->
 
 # align
+
+<!-- badges: start -->
+<!-- badges: end -->
 
 Methods for the alignment and merging of partially or inexactly aligned
 data.

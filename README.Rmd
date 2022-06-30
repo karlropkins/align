@@ -13,11 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+# align
 
 <!-- badges: start -->
 <!-- badges: end -->
-
-# align
 
 Methods for the alignment and merging of partially or inexactly
 aligned data.
@@ -41,3 +40,4 @@ Contributions are very welcome, using tidyverse contribution and code of conduct
 
 ## License
 GPL-3
+
