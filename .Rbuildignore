@@ -1,9 +1,14 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^LICENSE\.md$
 ^README\.Rmd$
-^\.github$
+^INDEX\.Rmd$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^_AQEval.yml$
+^\.github$
 ^doc$
+^Meta$
+^vignettes/articles$
+^LICENSE\.md$
+

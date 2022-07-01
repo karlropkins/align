@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- index.md is generated from index.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -15,7 +15,6 @@ knitr::opts_chunk$set(
 
 # align <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
-
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -26,7 +25,7 @@ aligned data.
 
 You can install the development version of align from [GitHub](https://github.com/). 
 
-(As well as `R`, the package also includes some `c++` code. So, if you have not used similar before you may need to install a compiler, for example [Rtools](https://cran.r-project.org/bin/windows/Rtools/) if you are using Windows).
+(As well as `R` code, the package also includes some `c++`. So, if you have not used similar before you may need to install a compiler, for example [Rtools](https://cran.r-project.org/bin/windows/Rtools/) if you are using Windows).
 
 
 ```{r install, eval=FALSE}
