@@ -26,9 +26,10 @@ devtools::install_github("KarlRopkins/align")
 
 ## Contributing
 
-Contributions are very welcome, using tidyverse contribution and code of
-conduct but not as strict as them regarding coding style…
+Contributions are very welcome, using tidyverse contribution guidance
+and code of conduct but not as strict as them regarding coding style…
+[Contributions](https://karlropkins.github.io/align/CONTRIBUTING.html)
 
 ## License
 
-GPL-3
+[GPL-3](https://karlropkins.github.io/align/LICENSE.html)
