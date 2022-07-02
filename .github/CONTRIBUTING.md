@@ -1,44 +1,51 @@
-# Contributing to align
+# Contributing to **align**
 
-This outlines how to propose a change to align. 
-For more detailed info about contributing to this, and other tidyverse packages, please see the
-[**development contributing guide**](https://rstd.io/tidy-contrib). 
+This outlines how to propose a change to align. The text is based on the template provided by the folks who developed the tidyverse packages, but 
+we are not as strict as them regarding coding style.
+
+Please see the [**tidy contributing guide**](https://rstd.io/tidy-contrib) for further details regarding contributions to tidyverse packages, and 
+good practices for those contributing to open software, datasets and archives more generally. 
 
 ## Fixing typos
 
-You can fix typos, spelling mistakes, or grammatical errors in the documentation directly using the GitHub web interface, as long as the changes are made in the _source_ file. 
-This generally means you'll need to edit [roxygen2 comments](https://roxygen2.r-lib.org/articles/roxygen2.html) in an `.R`, not a `.Rd` file. 
-You can find the `.R` file that generates the `.Rd` by reading the comment in the first line.
+You can fix typos, spelling mistakes, or grammatical errors in the documentation directly using the GitHub web interface or as a pull request (see below).
 
-## Bigger changes
+Documentation is generated using [roxygen2](https://roxygen2.r-lib.org/articles/roxygen2.html), so you will need to edit comments in the rocxygen comments 
+in the .R relevant script, rather than the .Rd file. (That gets built from the .R using devtools::document())   
+
+## Bigger changes and code changes
 
 If you want to make a bigger change, it's a good idea to first file an issue and make sure someone from the team agrees that it’s needed. 
-If you’ve found a bug, please file an issue that illustrates the bug with a minimal 
-[reprex](https://www.tidyverse.org/help/#reprex) (this will also help you write a unit test, if needed).
+
+Likewise, if you’ve found a bug, please file an issue. We would like you to illustrate the bug with a minimal 
+[reprex](https://www.tidyverse.org/help/#reprex) example and we may ask you to do that if we have problems replicated any non-reprex bug reports, but 
+we would appreciate a 'head-up' regardless of the format if you think anything is not behaving...
 
 ### Pull request process
 
-*   Fork the package and clone onto your computer. If you haven't done this before, we recommend using `usethis::create_from_github("karlropkins/align", fork = TRUE)`.
+*   Fork the package and clone onto your computer. If you haven't done this before, **tidyverse** folks recommend using 
+    `usethis::create_from_github("karlropkins/align", fork = TRUE)`.
 
 *   Install all development dependencies with `devtools::install_dev_deps()`, and then make sure the package passes R CMD check by running `devtools::check()`. 
-    If R CMD check doesn't pass cleanly, it's a good idea to ask for help before continuing. 
-*   Create a Git branch for your pull request (PR). We recommend using `usethis::pr_init("brief-description-of-change")`.
+    If R CMD check doesn't pass cleanly, it's a good idea to get in contact before continuing. 
 
-*   Make your changes, commit to git, and then create a PR by running `usethis::pr_push()`, and following the prompts in your browser.
-    The title of your PR should briefly describe the change.
-    The body of your PR should contain `Fixes #issue-number`.
+*   Create a Git branch for your pull request (PR). Here the **tidyverse** recommendation is to use `usethis::pr_init("brief-description-of-change")`.
 
-*  For user-facing changes, add a bullet to the top of `NEWS.md` (i.e. just below the first header). Follow the style described in <https://style.tidyverse.org/news.html>.
+*   Make your changes, commit to git, and then create a PR (**tidyverse** recommendation `usethis::pr_push()` tehn follow the prompts in your browser).
+    Ideally, the title of your PR should briefly describe the change, and the body of your PR should contain `Fixes #issue-number`.
+
+*   For user-facing changes, please include a suggestion for a `NEWS.Rmd` bullet. 
 
 ### Code style
 
-*   New code should follow the tidyverse [style guide](https://style.tidyverse.org). 
-    You can use the [styler](https://CRAN.R-project.org/package=styler) package to apply these styles, but please don't restyle code that has nothing to do with your PR.  
+*   Please feel free to follow [tidyverse style guide](https://style.tidyverse.org) regarding coding practices and format, but if it works and 
+    we can understand it, we are not going to waste anyone's time enforcing specific coding practices.  
 
-*  We use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html), for documentation.  
+*   We use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd-formatting.html), 
+    for documentation. This we require you to also do.  
 
-*  We use [testthat](https://cran.r-project.org/package=testthat) for unit tests. 
-   Contributions with test cases included are easier to accept.  
+*   We currently do NOT use [testthat](https://cran.r-project.org/package=testthat) for unit tests. We would appreciate worked examples demonstrating a code modification 
+    but, please, no testthat.  
 
 ## Code of Conduct
 
