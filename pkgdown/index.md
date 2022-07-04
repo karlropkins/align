@@ -24,6 +24,10 @@ install.packages("devtools") #if you don't already have it
 devtools::install_github("KarlRopkins/align")
 ```
 
+## Cheat Sheet
+
+<a href="man/cheatsheets/align_cheatsheet.pdf"><img src="man/cheatsheets/align_cheatsheet_thumb.png" width="330" height="252"/></a>
+
 ## Contributing
 
 Contributions are very welcome, using tidyverse contribution guidance

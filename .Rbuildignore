@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.Rhist$
 ^README\.Rmd$
 ^INDEX\.Rmd$
 ^_pkgdown\.yml$
