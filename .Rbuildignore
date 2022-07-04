@@ -11,5 +11,6 @@
 ^doc$
 ^Meta$
 ^vignettes/articles$
+^man/figures$
 ^LICENSE\.md$
 
