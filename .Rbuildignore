@@ -6,7 +6,7 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^_AQEval.yml$
+^_align.yml$
 ^\.github$
 ^doc$
 ^Meta$

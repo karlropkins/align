@@ -35,7 +35,7 @@ devtools::install_github("KarlRopkins/align")
 
 ## Cheat Sheet
 
-<a href="https://github.com/karlropkins/align/blob/master/man/figures/align_cheatsheet.pdf"><img src="https://github.com/karlropkins/align/blob/master/man/figures/align_cheatsheet_thumb.png" width="330" height="252"/></a>  
+<a href="https://github.com/karlropkins/align/blob/master/man/articles/align_cheatsheet.pdf"><img src="https://github.com/karlropkins/align/blob/master/man/articles/align_cheatsheet_thumb.png" width="330" height="252"/></a>  
 
 ## Contributing
 Contributions are very welcome, using tidyverse contribution guidance and code of conduct but not as strict as them regarding coding style...  [Contributions](https://karlropkins.github.io/align/CONTRIBUTING.html)   
