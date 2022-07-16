@@ -11,7 +11,7 @@ data.
 
 ## Installation
 
-You can install the development version of align from
+You can install the development version of **align** from
 [GitHub](https://github.com/).
 
 (As well as `R`, the package also includes some `c++` code. So, if you
@@ -30,8 +30,9 @@ devtools::install_github("KarlRopkins/align")
 
 ## Contributing
 
-Contributions are very welcome, using tidyverse contribution guidance
-and code of conduct but not as strict as them regarding coding style…
+**align** is an in-development package, and contributions are very
+welcome. We are using tidyverse contribution guidance regarding code of
+conduct but are not strict as them regarding coding style…
 [Contributions](https://karlropkins.github.io/align/CONTRIBUTING.html)
 
 ## License
