@@ -1,5 +1,18 @@
 url: https://karlropkins.github.io/align/
 template:
   bootstrap: 5
-destination: doc
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
 
+navbar:
+  type: inverse
+  structure:
+    left:  [intro, reference, news]
+    right: [search, github]
+
+home:
+  title: R Package
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
