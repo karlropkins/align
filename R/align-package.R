@@ -26,10 +26,6 @@
 #' environmental time series. TrAC Trends in Analytical Chemistry, 28(3),
 #' pp.373-391. \doi{https://doi.org/10.1016/j.trac.2008.11.013}.
 #'
-#' @docType package
 #' @name align
-#'
-#' @useDynLib align
-#' @importFrom Rcpp sourceCpp
-NULL
-
+#' @aliases align
+"_PACKAGE"

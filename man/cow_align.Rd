@@ -2,12 +2,25 @@
 % Please edit documentation in R/cow_align.R
 \name{cow_align}
 \alias{cow_align}
+\alias{cow_align.default}
 \title{cow_align}
 \source{
 Based on matlab code at http://www.models.life.ku.dk/dtw_cow.
 }
 \usage{
 cow_align(x, y = NULL, by = NULL, ...)
+
+\method{cow_align}{default}(
+  x,
+  y = NULL,
+  by = NULL,
+  seg,
+  slack,
+  print.report = FALSE,
+  r.power = FALSE,
+  pad.method = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{First \code{vector} or a \code{data.frame} containing

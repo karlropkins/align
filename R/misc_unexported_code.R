@@ -1,5 +1,15 @@
+###################################
+# package handlers
+###################################
 
+#' @useDynLib align
+#' @importFrom Rcpp sourceCpp
 
+#' @importFrom stats approx cor
+#' @importFrom utils capture.output methods
+
+#undefined globals
+utils::globalVariables(c("index", "scores", "warp.y", "iteration"))
 
 ##################################
 #cow_convert

@@ -2,6 +2,7 @@
 % Please edit documentation in R/align-package.R
 \docType{package}
 \name{align}
+\alias{align-package}
 \alias{align}
 \title{Data Alignment Tools}
 \description{
@@ -28,4 +29,22 @@ Ropkins, K., Carlsaw, D.C., Goodman, P.S. and Tate, J.E., 2009.
 Application of non-linear time-alignment and integration methods to
 environmental time series. TrAC Trends in Analytical Chemistry, 28(3),
 pp.373-391. \doi{https://doi.org/10.1016/j.trac.2008.11.013}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/karlropkins/align}
+  \item \url{https://karlropkins.github.io/align/}
+  \item Report bugs at \url{https://github.com/karlropkins/align/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Karl Ropkins \email{karl.ropkins@gmail.com}
+
+Authors:
+\itemize{
+  \item Daniel Quiroz Moreno \email{cristianquirozd1997@gmail.com}
+}
+
 }

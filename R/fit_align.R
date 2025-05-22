@@ -6,6 +6,7 @@
 #rebuild of previous sleeper.service function
 
 #' @name fit_align
+#' @aliases fit_align fit_align.default
 #' @description Time warp a data-series using a time-offsetting model.
 #' @param x A first time-series \code{vector} or a \code{data.frame}
 #' containing time-series to use a reference when warp-fitting
@@ -56,9 +57,10 @@ fit_align <-
   }
 
 #splatted function
+#' @rdname fit_align
 #' @importFrom RcppDE DEoptim
+#' @method fit_align default
 #' @export
-#' @method cow_align default
 fit_align.default <-
   function(x, y=NULL, by=NULL,
            fun = function(par, x) par[1] + (par[2]*x),

@@ -2,9 +2,20 @@
 % Please edit documentation in R/fit_align.R
 \name{fit_align}
 \alias{fit_align}
+\alias{fit_align.default}
 \title{fit_align}
 \usage{
 fit_align(x, y = NULL, by = NULL, ...)
+
+\method{fit_align}{default}(
+  x,
+  y = NULL,
+  by = NULL,
+  fun = function(par, x) par[1] + (par[2] * x),
+  lower = c(-60, 0.3),
+  upper = c(60, 3),
+  ...
+)
 }
 \arguments{
 \item{x}{A first time-series \code{vector} or a \code{data.frame}

@@ -3,6 +3,7 @@
 ############################################
 
 #' @name cow_align
+#' @aliases cow_align cow_align.default
 #' @description Non-linear alignment using Correlation Optimized
 #' warping (COW). This is \code{cow} but with argument structure like
 #' other ..._align functions.
@@ -146,7 +147,7 @@ cow_align <-
     UseMethod("cow_align")
   }
 
-
+#' @rdname cow_align
 #' @export
 #' @method cow_align default
 cow_align.default <-

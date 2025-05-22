@@ -62,14 +62,14 @@
 #    method
 
 
-#' @rdname cor_align
+
 #' @export
 cor_align <-
 function(x, y = NULL, by = NULL, ...) {
   UseMethod("cor_align")
 }
 
-
+#' @rdname cor_align
 #' @export
 #' @method cor_align default
 cor_align.default <-

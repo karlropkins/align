@@ -2,6 +2,8 @@
 
 * Package releases 
 
+    * __v.0.0.7__ [2025-05-22] package build update (obviously been a while)
+
     * __v.0.0.6__ [2022-07-16] added cheat sheet to website.
 
     * __v 0.0.5__ [2022-06-30] package docs and website update. 
