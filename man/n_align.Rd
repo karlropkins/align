@@ -2,9 +2,10 @@
 % Please edit documentation in R/n_align.R
 \name{n_align}
 \alias{n_align}
+\alias{n_align.default}
 \title{n_align}
 \usage{
-n_align(x, y = NULL, n = 0, by = NULL, ...)
+\method{n_align}{default}(x, y = NULL, n = 0, by = NULL, ...)
 }
 \arguments{
 \item{x}{First \code{vector} or \code{data.frame}, to be aligned
@@ -19,19 +20,12 @@ default 0.}
 \item{by}{If \code{x} or \code{y} are \code{data.frame}s, the names
 of the columns that \code{n_align} should align.}
 
-\item{...}{Other arguments currently include:
-\describe{
-  \item{\code{output}}{The default \code{..._align} \code{output}
-  is \code{"ans"}. \code{output} options include: \code{"ans"} and
-   \code{"alignment"}. Multiple \code{output}s are allowed, but
-   only the last is captured by return. \code{alignment} is a
-   special object class which may be helpful to those looking at
-   alignments in more detail.}
-}}
+\item{...}{Other arguments, typically handled by common \code{alignment}
+functions or ignored.}
 }
 \value{
-\code{data.frame} of \code{x} and \code{y}, with \code{y}
-offset \code{n} rows.
+By default, \code{n_align} returns a \code{data.frame} of
+\code{x} and \code{y}, with \code{y} offset \code{n} rows.
 }
 \description{
 Basic alignment, row offsetting second of two

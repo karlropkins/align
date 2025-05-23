@@ -3,7 +3,7 @@
 ############################################
 
 #' @name cow_align
-#' @aliases cow_align
+#' @aliases cow_align cow_align.default
 #' @description Non-linear alignment using Correlation Optimized
 #' warping (COW). This is \code{cow} but with argument structure like
 #' other ..._align functions.
@@ -15,22 +15,18 @@
 #' names of data columns to aligned.
 #' @param seg Segment size for warping.
 #' @param slack Segment size expansion/compression range.
-#' @param ... Other arguments currently include:
-#' \describe{
-#'   \item{\code{print.report}}{(logical) print segment report.}
-#'   \item{\code{r.power}}{(logical or numeric) correlation power
-#'   (1-4).}
-#'   \item{\code{pad.method}}{Handling method if \code{x} and
-#'   \code{y} are different lengths: 1 (default) Start with
-#'   start-points aligned; 2 Start with mid-point aligned.}
-#'   \item{\code{output}}{The default \code{cow_align} \code{output}
-#'   is \code{c("summary", "plot", "ans")}. \code{output} options
-#'    include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
-#'    \code{"alignment"}. Multiple \code{output}s are allowed, but
-#'    only the last is captured by return. \code{alignment} is a
-#'    special object class which may be helpful to those looking at
-#'    alignments in more detail.}
-#' }
+#' @param print.report (logical) print segment report.
+#' @param r.power (logical or numeric) correlation power
+#' (1-4).
+#' @param pad.method Handling method if \code{x} and
+#' \code{y} are different lengths: 1 (default) Start with
+#' start-points aligned; 2 Start with mid-point aligned.
+#' @param ... Other arguments, typically applied by generic
+#' \code{alignment} methods or ignored.
+#' @return By default, \code{cor_align} returns \code{x} and \code{y}
+#' as an aligned \code{data.frame}. It also provides a lag correlation
+#' profile (plot) and alignment report. The extra \code{function},
+#' \code{output}, can be used to modify this behavior.
 #' @note This function is based on previous matlab (see Source),
 #' but some formal arguments and parameters have been changed to
 #' make function more consistent with other \code{align} functions.
@@ -149,30 +145,23 @@
 # once sorted, remove equal.segment related code...
 ###############################
 
-#' @rdname cow_align
-#' @export
-cow_align <-
-  function(x, y = NULL, by = NULL,
-           seg, slack,...) {
-    UseMethod("cow_align")
-  }
 
-## #' @rdname cow_align
+#' @rdname cow_align
 #' @export
 #' @method cow_align default
 cow_align.default <-
   function(x, y=NULL, by=NULL,
            seg, slack,
+           print.report = FALSE,
+           r.power = FALSE,
+           pad.method = 1,
            ...)
   {
 
   #tidy default settings
   x.args <- align_extraArgsHandler(...,
                   default.args = list(method = "cow_align",
-                                      output = c("summary", "plot", "ans"),
-                                      print.report = FALSE,
-                                      r.power = FALSE,
-                                      pad.method = 1),
+                                      output = c("summary", "plot", "ans")),
                   ref.args = c("ans","plot", "offset",
                   "summary", "alignment"))
 
@@ -189,9 +178,9 @@ cow_align.default <-
   #fit warp path
   warp.path <- align_fitXYCOWWarpPath(x=d$x, y=d$y, seg=seg,
                                       slack=slack,
-                                      print.report=x.args$print.report,
-                                      r.power=x.args$r.power,
-                                      pad.method = x.args$pad.method)
+                                      print.report=print.report,
+                                      r.power=r.power,
+                                      pad.method = pad.method)
 
 
   #replaced option[1] with print.report
@@ -231,6 +220,15 @@ cow_align.default <-
   #     outputs = ans, plot, summary alignment object, etc.
   align_output(alignment, x.args$output)
 }
+
+
+## #' @rdname cow_align
+#' @export
+cow_align <-
+  function(x, y = NULL, by = NULL,
+           seg, slack,...) {
+    UseMethod("cow_align")
+  }
 
 
 #non-exported functions

@@ -2,9 +2,10 @@
 % Please edit documentation in R/cor_align.R
 \name{cor_align}
 \alias{cor_align}
+\alias{cor_align.default}
 \title{cor_align}
 \usage{
-cor_align(x, y = NULL, by = NULL, ...)
+\method{cor_align}{default}(x, y = NULL, by = NULL, min.overlap = NULL, ...)
 }
 \arguments{
 \item{x}{First \code{vector} or \code{data.frame}, to be aligned
@@ -16,27 +17,19 @@ merge with \code{x}.}
 \item{by}{If \code{x} or \code{y} are \code{data.frame}s, the names
 of the columns that \code{cor_align} should align with.}
 
-\item{...}{Other arguments:
-\describe{
-   \item{\code{min.overlap}}{By default, \code{cor_align} compares
-   correlations for lags with \code{x}/\code{y} overlaps of
-   2000 rows or 20\% if smaller. Other minimum (row number)
-   overlaps can be set using the extra argument
-   \code{min.overlap}.}
-   \item{\code{output}}{The default \code{cor_align} \code{output}
-   is \code{c("plot", "summary", "ans")}. \code{output} options
-   include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
-   \code{"alignment"}. Multiple \code{output}s are allowed, but
-   only the last is captured by return. \code{alignment} is a
-   special object class which may be helpful to those looking at
-   alignments in more detail.}
-}}
+\item{min.overlap}{By default, \code{cor_align} compares
+correlations for lags with \code{x}/\code{y} overlaps of
+2000 rows or 20\% if smaller. Other minimum (row number)
+overlaps can be set using the extra argument min.overlap.}
+
+\item{...}{Other arguments, typically handled by common
+\code{alignment} functions/methods or ignored.}
 }
 \value{
 By default, \code{cor_align} returns \code{x} and \code{y}
 as an aligned \code{data.frame}. It also provides a lag correlation
-profile (plot) and alignment report. See above about modifying
-outputs.
+profile (plot) and alignment report. The extra \code{function},
+\code{output}, can be used to modify this behavior.
 }
 \description{
 Correlation based (linear) alignment, row

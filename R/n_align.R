@@ -3,6 +3,7 @@
 ############################################
 
 #' @name n_align
+#' @aliases n_align n_align.default
 #' @description Basic alignment, row offsetting second of two
 #' \code{vector}s or \code{data.frame}s.
 #' @param x First \code{vector} or \code{data.frame}, to be aligned
@@ -13,18 +14,11 @@
 #' default 0.
 #' @param by If \code{x} or \code{y} are \code{data.frame}s, the names
 #' of the columns that \code{n_align} should align.
-#' @param ... Other arguments currently include:
-#' \describe{
-#'   \item{\code{output}}{The default \code{..._align} \code{output}
-#'   is \code{"ans"}. \code{output} options include: \code{"ans"} and
-#'    \code{"alignment"}. Multiple \code{output}s are allowed, but
-#'    only the last is captured by return. \code{alignment} is a
-#'    special object class which may be helpful to those looking at
-#'    alignments in more detail.}
-#' }
+#' @param ... Other arguments, typically handled by common \code{alignment}
+#' functions or ignored.
 #' @author Karl Ropkins
-#' @return \code{data.frame} of \code{x} and \code{y}, with \code{y}
-#' offset \code{n} rows.
+#' @return By default, \code{n_align} returns a \code{data.frame} of
+#' \code{x} and \code{y}, with \code{y} offset \code{n} rows.
 
 #splatted function (2019/06/07)
 #based on align in pems.utils
@@ -41,13 +35,6 @@
 #added by
 #    (all currently messy)
 
-
-#' @rdname n_align
-#' @export
-n_align <-
-  function(x, y = NULL, n = 0, by = NULL, ...) {
-    UseMethod("n_align")
-  }
 
 
 #' @export
@@ -139,4 +126,11 @@ n_align.default <-
 
     #output
     align_output(alignment, x.args$output)
+  }
+
+
+#' @export
+n_align <-
+  function(x, y = NULL, n = 0, by = NULL, ...) {
+    UseMethod("n_align")
   }

@@ -3,6 +3,7 @@
 ############################################
 
 #' @name cor_align
+#' @aliases cor_align cor_align.default
 #' @description Correlation based (linear) alignment, row
 #' offsetting second of two \code{vector}s or \code{data.frame}s
 #' based on best fit as estimated by correlation coefficient.
@@ -12,26 +13,17 @@
 #' merge with \code{x}.
 #' @param by If \code{x} or \code{y} are \code{data.frame}s, the names
 #' of the columns that \code{cor_align} should align with.
-#' @param ... Other arguments:
-#' \describe{
-#'    \item{\code{min.overlap}}{By default, \code{cor_align} compares
-#'    correlations for lags with \code{x}/\code{y} overlaps of
-#'    2000 rows or 20\% if smaller. Other minimum (row number)
-#'    overlaps can be set using the extra argument
-#'    \code{min.overlap}.}
-#'    \item{\code{output}}{The default \code{cor_align} \code{output}
-#'    is \code{c("plot", "summary", "ans")}. \code{output} options
-#'    include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
-#'    \code{"alignment"}. Multiple \code{output}s are allowed, but
-#'    only the last is captured by return. \code{alignment} is a
-#'    special object class which may be helpful to those looking at
-#'    alignments in more detail.}
-#' }
+#' @param min.overlap By default, \code{cor_align} compares
+#' correlations for lags with \code{x}/\code{y} overlaps of
+#' 2000 rows or 20\% if smaller. Other minimum (row number)
+#' overlaps can be set using the extra argument min.overlap.
+#' @param ... Other arguments, typically handled by common
+#' \code{alignment} functions/methods or ignored.
 #' @author Karl Ropkins
 #' @return By default, \code{cor_align} returns \code{x} and \code{y}
 #' as an aligned \code{data.frame}. It also provides a lag correlation
-#' profile (plot) and alignment report. See above about modifying
-#' outputs.
+#' profile (plot) and alignment report. The extra \code{function},
+#' \code{output}, can be used to modify this behavior.
 #' @note \code{cor_align} is based on \code{cAlign} function in
 #' earlier version of \code{pems.utils}. It works with vectors,
 #' data.frames and other objects that can be converted to data.frame
@@ -62,18 +54,12 @@
 #    method
 
 
-#' @rdname cor_align
-#' @export
-cor_align <-
-function(x, y = NULL, by = NULL, ...) {
-  UseMethod("cor_align")
-}
 
 ## #' @rdname cor_align
 #' @export
 #' @method cor_align default
 cor_align.default <-
-function(x, y = NULL, by = NULL, ...){
+function(x, y = NULL, by = NULL, min.overlap = NULL, ...){
 
     #linear offset alignment using best correlation
     #to estimate n, the nAlign...
@@ -143,18 +129,19 @@ function(x, y = NULL, by = NULL, ...){
     }
 
     #set min.overlap if not in call
-    if(!"min.overlap" %in% names(x.args))
-      x.args$min.overlap <- min(c(floor(min(length(x),
-                                length(y))*0.2), 2000))
-    pad <- length(x) - x.args$min.overlap
+    if(is.null(min.overlap)){
+      min.overlap <- min(c(floor(min(length(x),
+                                     length(y))*0.2), 2000))
+    }
+    pad <- length(x) - min.overlap
     y <- c(rep(NA, pad), y, rep(NA, pad))
 
     #use C_ylagxCOR to find best fit alignment
     lag.scs <- .Call("_align_C_ylagxCOR", x, y)
-    index <- (1:length(lag.scs)) - length(x) + x.args$min.overlap - 1
+    index <- (1:length(lag.scs)) - length(x) + min.overlap - 1
     if(!reversed) index <- -index
     bst.lag <- index[which(lag.scs==max(lag.scs, na.rm=TRUE))[1]]
-                                    #NOTE: [1] in case tie!!
+                                    #NOTE: [1] in case of tie!!
 
     #######################################################
     #NOTE:
@@ -185,6 +172,12 @@ function(x, y = NULL, by = NULL, ...){
     #     outputs = ans, plot, summary alignment object, etc.
     align_output(alignment, x.args$output)
 }
+
+#' @export
+cor_align <-
+  function(x, y = NULL, by = NULL, ...) {
+    UseMethod("cor_align")
+  }
 
 
 #unexported functions

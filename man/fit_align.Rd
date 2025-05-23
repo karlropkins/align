@@ -5,7 +5,15 @@
 \alias{fit_align.default}
 \title{fit_align}
 \usage{
-fit_align(x, y = NULL, by = NULL, fun, lower, upper, ...)
+\method{fit_align}{default}(
+  x,
+  y = NULL,
+  by = NULL,
+  fun = function(par, x) par[1] + (par[2] * x),
+  lower = c(-60, 0.3),
+  upper = c(60, 3),
+  ...
+)
 }
 \arguments{
 \item{x}{A first time-series \code{vector} or a \code{data.frame}
@@ -25,19 +33,20 @@ to be applied.}
 
 \item{upper}{The highest values for \code{fun}, one per parameter.}
 
-\item{...}{Other arguments currently include:
-\describe{
-  \item{\code{output}}{The default \code{..._align} \code{output}
-  is \code{c("summary", "plot", "ans")}. \code{output} options
-   include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
-   \code{"alignment"}. Multiple \code{output}s are allowed, but
-   only the last is captured by return. \code{alignment} is a
-   special object class which may be helpful to those looking at
-   alignments in more detail.}
-}}
+\item{...}{Other arguments, typically applied by generic
+\code{alignment} methods or ignored.}
 }
 \description{
 Time warp a data-series using a time-offsetting model.
+}
+\details{
+The default \code{fit_align} \code{output}
+is \code{c("summary", "plot", "ans")}. \code{output} options
+include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
+\code{"alignment"}. Multiple \code{output}s are allowed, but
+only the last is captured by return. \code{alignment} is a
+special object class which may be helpful to those looking at
+alignments in more detail.
 }
 \author{
 Karl Ropkins

@@ -6,7 +6,7 @@
 #rebuild of previous sleeper.service function
 
 #' @name fit_align
-#' @aliases fit_align
+#' @aliases fit_align fit_align.default
 #' @description Time warp a data-series using a time-offsetting model.
 #' @param x A first time-series \code{vector} or a \code{data.frame}
 #' containing time-series to use a reference when warp-fitting
@@ -19,17 +19,14 @@
 #' to be applied.
 #' @param lower The lowest values for \code{fun}, one per parameter.
 #' @param upper The highest values for \code{fun}, one per parameter.
-#' @param ... Other arguments currently include:
-#' \describe{
-#'   \item{\code{output}}{The default \code{..._align} \code{output}
-#'   is \code{c("summary", "plot", "ans")}. \code{output} options
-#'    include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
-#'    \code{"alignment"}. Multiple \code{output}s are allowed, but
-#'    only the last is captured by return. \code{alignment} is a
-#'    special object class which may be helpful to those looking at
-#'    alignments in more detail.}
-#' }
+#' @param ... Other arguments, typically applied by generic
+#' \code{alignment} methods or ignored.
 #' @author Karl Ropkins
+#' @return By default, \code{fit_align} returns \code{x} and \code{y}
+#' as an aligned \code{data.frame}. It also provides a lag correlation
+#' profile (plot) and alignment report. The extra \code{function},
+#' \code{output}, can be used to modify this behavior.
+#'
 
 
 ############################
@@ -58,15 +55,9 @@
 #      see notes in function
 ##################################
 
-#' @rdname fit_align
-#' @export
-fit_align <-
-  function(x, y = NULL, by = NULL, fun, lower, upper, ...) {
-    UseMethod("fit_align")
-  }
 
 #splatted function
-## #' @rdname fit_align
+#' @rdname fit_align
 #' @importFrom RcppDE DEoptim
 #' @method fit_align default
 #' @export
@@ -164,6 +155,12 @@ fit_align.default <-
   }
 
 
+## #' @rdname fit_align
+#' @export
+fit_align <-
+  function(x, y = NULL, by = NULL, ...) {
+    UseMethod("fit_align")
+  }
 
 #####################################
 #unexported functions
