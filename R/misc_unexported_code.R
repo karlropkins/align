@@ -6,7 +6,7 @@
 #' @importFrom Rcpp sourceCpp
 
 #' @importFrom stats approx cor
-#' @importFrom utils capture.output methods
+#' @importFrom utils capture.output methods modifyList
 
 #undefined globals
 utils::globalVariables(c("index", "scores", "warp.y", "iteration"))

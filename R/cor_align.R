@@ -62,14 +62,14 @@
 #    method
 
 
-
+#' @rdname cor_align
 #' @export
 cor_align <-
 function(x, y = NULL, by = NULL, ...) {
   UseMethod("cor_align")
 }
 
-#' @rdname cor_align
+## #' @rdname cor_align
 #' @export
 #' @method cor_align default
 cor_align.default <-
@@ -96,8 +96,8 @@ function(x, y = NULL, by = NULL, ...){
     #       also setup for general output management...
     #align_extraArgsHandler in unexported code
     x.args <- align_extraArgsHandler(...,
-                  default.method = "cor_align",
-                  default.output = c("summary", "plot", "ans"),
+                  default.args = list(method = "cor_align",
+                                      output = c("summary", "plot", "ans")),
                   ref.args = c("ans","plot", "offset",
                                "summary", "alignment"))
 

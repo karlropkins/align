@@ -6,7 +6,7 @@
 #rebuild of previous sleeper.service function
 
 #' @name fit_align
-#' @aliases fit_align fit_align.default
+#' @aliases fit_align
 #' @description Time warp a data-series using a time-offsetting model.
 #' @param x A first time-series \code{vector} or a \code{data.frame}
 #' containing time-series to use a reference when warp-fitting
@@ -15,11 +15,20 @@
 #' containing time-series to warp-fit with \code{x}.
 #' @param by If \code{x} or \code{y} are \code{data.frames}, the names
 #' of time-series to warp-fit.
-#' @param fun A \code{function} describing the warp-fitting model to
-#' be applied.
+#' @param fun A \code{function} describing the warp-fitting model
+#' to be applied.
 #' @param lower The lowest values for \code{fun}, one per parameter.
 #' @param upper The highest values for \code{fun}, one per parameter.
-#' @param ... Other arguments, currently ignored.
+#' @param ... Other arguments currently include:
+#' \describe{
+#'   \item{\code{output}}{The default \code{..._align} \code{output}
+#'   is \code{c("summary", "plot", "ans")}. \code{output} options
+#'    include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
+#'    \code{"alignment"}. Multiple \code{output}s are allowed, but
+#'    only the last is captured by return. \code{alignment} is a
+#'    special object class which may be helpful to those looking at
+#'    alignments in more detail.}
+#' }
 #' @author Karl Ropkins
 
 
@@ -52,12 +61,12 @@
 #' @rdname fit_align
 #' @export
 fit_align <-
-  function(x, y = NULL, by = NULL, ...) {
+  function(x, y = NULL, by = NULL, fun, lower, upper, ...) {
     UseMethod("fit_align")
   }
 
 #splatted function
-#' @rdname fit_align
+## #' @rdname fit_align
 #' @importFrom RcppDE DEoptim
 #' @method fit_align default
 #' @export
@@ -71,8 +80,8 @@ fit_align.default <-
 
     #using align_extraArgsHandler to handle x.args
     x.args <- align_extraArgsHandler(...,
-                                     default.method = "fit_align",
-                                     default.output = c("summary", "plot", "ans"),
+                                     default.args = list(method = "fit_align",
+                                                         output = c("summary", "plot", "ans")),
                                      ref.args = c("ans","plot", "offset",
                                                   "summary", "alignment"))
 

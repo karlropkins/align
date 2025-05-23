@@ -31,7 +31,7 @@ plot(x, type = "l", main = "Simple Warping")
 #transformations < 1 compress time-series
 lines(warp(x, 0.5), col = "red")
 #transformations > 1 expand time-series
-#to expand and the compress, and end at original end value
+#to expand and then compress, and end at original end value
 #   mean(transformation) should equal 1
 lines(warp(x, c(1.75, 0.25)), col = "blue")
 legend(725, 350, c("0.5", "1.75, 0.25"),

@@ -186,15 +186,18 @@ summary.alignment <-
 
 align_extraArgsHandler <-
   function(..., default.method = "..._align",
+           default.args = list(),
            default.output = c("ans", "plot"),
            ref.args = c("ans", "plot", "alignment")
   ){
 
     #handles bad method requestes
     #rationalises output = "plot" and plot = TRUE, etc
-    extra.args <- list(...)
-    #make output if not there
+    extra.args <- modifyList(default.args, list(...))
+#could drop the default.output and method now....
 
+
+    #make output if not there
     if(!"method" %in% names(extra.args))
       extra.args$method <- default.method
     if(!extra.args$method[1] %in% c("n_align", "cor_align",

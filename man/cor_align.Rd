@@ -2,12 +2,9 @@
 % Please edit documentation in R/cor_align.R
 \name{cor_align}
 \alias{cor_align}
-\alias{cor_align.default}
 \title{cor_align}
 \usage{
 cor_align(x, y = NULL, by = NULL, ...)
-
-\method{cor_align}{default}(x, y = NULL, by = NULL, ...)
 }
 \arguments{
 \item{x}{First \code{vector} or \code{data.frame}, to be aligned

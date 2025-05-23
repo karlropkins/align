@@ -2,25 +2,12 @@
 % Please edit documentation in R/cow_align.R
 \name{cow_align}
 \alias{cow_align}
-\alias{cow_align.default}
 \title{cow_align}
 \source{
 Based on matlab code at http://www.models.life.ku.dk/dtw_cow.
 }
 \usage{
-cow_align(x, y = NULL, by = NULL, ...)
-
-\method{cow_align}{default}(
-  x,
-  y = NULL,
-  by = NULL,
-  seg,
-  slack,
-  print.report = FALSE,
-  r.power = FALSE,
-  pad.method = 1,
-  ...
-)
+cow_align(x, y = NULL, by = NULL, seg, slack, ...)
 }
 \arguments{
 \item{x}{First \code{vector} or a \code{data.frame} containing
@@ -32,20 +19,26 @@ cow_align(x, y = NULL, by = NULL, ...)
 \item{by}{If \code{x} or \code{y} are \code{data.frames}, the
 names of data columns to aligned.}
 
-\item{...}{Other arguments, currently ignored.}
-
 \item{seg}{Segment size for warping.}
 
 \item{slack}{Segment size expansion/compression range.}
 
-\item{print.report}{(logical) print segment report.}
-
-\item{r.power}{(logical or numeric) correlation power
-(1-4).}
-
-\item{pad.method}{Handling method if \code{x} and \code{y} are
-different lengths: 1 (default) Start with start-points aligned;
-2 Start with mid-point aligned.}
+\item{...}{Other arguments currently include:
+\describe{
+  \item{\code{print.report}}{(logical) print segment report.}
+  \item{\code{r.power}}{(logical or numeric) correlation power
+  (1-4).}
+  \item{\code{pad.method}}{Handling method if \code{x} and
+  \code{y} are different lengths: 1 (default) Start with
+  start-points aligned; 2 Start with mid-point aligned.}
+  \item{\code{output}}{The default \code{cow_align} \code{output}
+  is \code{c("summary", "plot", "ans")}. \code{output} options
+   include: \code{"ans"}, \code{"plot"}, \code{"summary"} and
+   \code{"alignment"}. Multiple \code{output}s are allowed, but
+   only the last is captured by return. \code{alignment} is a
+   special object class which may be helpful to those looking at
+   alignments in more detail.}
+}}
 }
 \description{
 Non-linear alignment using Correlation Optimized
@@ -72,5 +65,5 @@ preprocessing methods for chromatographic Data, Journal of
 Chemometrics 18 (2004), 231-241.
 }
 \author{
-Daniel Quiroz Moreno.
+Daniel Quiroz Moreno with contributions by Karl Ropkins.
 }

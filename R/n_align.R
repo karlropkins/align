@@ -13,7 +13,15 @@
 #' default 0.
 #' @param by If \code{x} or \code{y} are \code{data.frame}s, the names
 #' of the columns that \code{n_align} should align.
-#' @param ... Other arguments, currently ignored.
+#' @param ... Other arguments currently include:
+#' \describe{
+#'   \item{\code{output}}{The default \code{..._align} \code{output}
+#'   is \code{"ans"}. \code{output} options include: \code{"ans"} and
+#'    \code{"alignment"}. Multiple \code{output}s are allowed, but
+#'    only the last is captured by return. \code{alignment} is a
+#'    special object class which may be helpful to those looking at
+#'    alignments in more detail.}
+#' }
 #' @author Karl Ropkins
 #' @return \code{data.frame} of \code{x} and \code{y}, with \code{y}
 #' offset \code{n} rows.
@@ -45,7 +53,6 @@ n_align <-
 #' @export
 #' @method n_align default
 n_align.default <-
-n_align <-
   function(x, y = NULL, n = 0, by = NULL, ...){
     #same as previously align
     #    without pems class handling and INSTEAD
@@ -58,8 +65,8 @@ n_align <-
     #Done:
     #To consider doing: "ans","plot", "offset", "summary", "alignment"
     x.args <- align_extraArgsHandler(...,
-                default.method = "n_align",
-                default.output = c("ans"),
+                default.args = list(method = "n_align",
+                                    output = c("ans")),
                 ref.args = c("ans", "alignment"))
 
     ####################################

@@ -19,7 +19,15 @@ default 0.}
 \item{by}{If \code{x} or \code{y} are \code{data.frame}s, the names
 of the columns that \code{n_align} should align.}
 
-\item{...}{Other arguments, currently ignored.}
+\item{...}{Other arguments currently include:
+\describe{
+  \item{\code{output}}{The default \code{..._align} \code{output}
+  is \code{"ans"}. \code{output} options include: \code{"ans"} and
+   \code{"alignment"}. Multiple \code{output}s are allowed, but
+   only the last is captured by return. \code{alignment} is a
+   special object class which may be helpful to those looking at
+   alignments in more detail.}
+}}
 }
 \value{
 \code{data.frame} of \code{x} and \code{y}, with \code{y}
