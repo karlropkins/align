@@ -2,7 +2,7 @@ pandoc: '3.2'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-05-30T15:09Z
+last_built: 2025-05-30T15:18Z
 urls:
   reference: https://karlropkins.github.io/align/reference
   article: https://karlropkins.github.io/align/articles
