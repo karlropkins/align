@@ -1,5 +1,10 @@
 # align version 0.0
 
+After v0.0.7 **align** repackaged as **alignment**
+
+Holding 'mothballed' sources for projects using related code, but users 
+wanting most recent code should see https://karlropkins.github.io/alignment/ 
+
 * Package releases 
 
     * __v.0.0.7__ [2025-05-22] package build update (obviously been a while)

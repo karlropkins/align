@@ -9,6 +9,19 @@
 Methods for the alignment and merging of partially or inexactly aligned
 data.
 
+## Important
+
+**align** was renamed/repackaged as **alignment** after 2025-05-25. The
+v.0.0.7 package is retained here for anyone still using related
+code/method.
+
+Users wanting most recent code should check out
+<https://karlropkins.github.io/alignment/>
+
+Currently, not aware of any issues transitioning from **align** to
+**alignment**, but anyone with any problems with the newer package,
+please get in contact…
+
 ## Installation
 
 You can install the development version of **align** from
